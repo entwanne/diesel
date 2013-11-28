@@ -10,7 +10,7 @@ using namespace std;
 /* Used for looking up token int id : token string name */
 typedef struct {
     int  token;
-    char *name;
+    const char *name;
 } token_name;
 
 

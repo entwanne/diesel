@@ -1,5 +1,7 @@
 /* Some global error routines. NOTE: Solve this in a better way later. */
 
+#include <cstdlib>
+
 #include "error.hh"
 
 
@@ -11,7 +13,7 @@ int error_count = 0;
 
 
 /* General error outstream. */
-ostream& error(char *header) {
+ostream& error(const char *header) {
     error_count++;
     return cerr << header;
 }
@@ -25,7 +27,7 @@ ostream& error(position_information *pos) {
 
 
 /* Abort program with error message. */
-void fatal(char *msg) {
+void fatal(const char *msg) {
     error() << "Fatal: " << msg << endl << flush;
     abort();
 }
@@ -35,7 +37,7 @@ void fatal(char *msg) {
    the grammar, so it's useful to at least include the line number. Since
    the error is not one we've accounted for, we don't have access to any
    position_information. NOTE: Fix scanner.l so it catches weird syntax? */
-void yyerror(char *msg) {
+void yyerror(const char *msg) {
     error() << "line " << yylineno << ": " << msg << endl << flush;
 }
 
@@ -56,7 +58,7 @@ ostream& type_error(position_information *pos) {
 
 
 /* General trace print function, used for debugging. */
-ostream& debug(char *header) {
+ostream& debug(const char *header) {
     return cerr << header;
 }
 

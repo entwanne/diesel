@@ -32,14 +32,14 @@ public:
 
 /* Various methods for printing things, with or without position info. 
    They are all defined for real in error.cc. */
-extern void      fatal(char *);     // Prints message, aborts compiling.
-extern void      yyerror(char *);   // This must be defined, but using
+extern void      fatal(const char *);     // Prints message, aborts compiling.
+extern void      yyerror(const char *);   // This must be defined, but using
                                     // error(pos) << "foo" is preferrable.
-extern ostream&  error(char *header = "Error: ");
+extern ostream&  error(const char *header = "Error: ");
 extern ostream&  error(position_information *);
 extern ostream&  type_error();
 extern ostream&  type_error(position_information *);
-extern ostream&  debug(char *header = "Debug: ");
+extern ostream&  debug(const char *header = "Debug: ");
 extern ostream&  debug(position_information *);
 
 #endif
