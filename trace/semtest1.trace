@@ -1,0 +1,194 @@
+Unoptimized AST for "INDEX"
+Statement list (preceding, last_stmt)
++-Statement list (preceding, last_stmt)
+| +-NULL
+| +-Assignment (left, right)
+|   +-Id (J) [INTEGER]
+|   +-Integer [10]
++-While (condition, body)
+  +-Greater than (left, right) [INTEGER]
+  | +-Id (J) [INTEGER]
+  | +-Integer [0]
+  +-Statement list (preceding, last_stmt)
+    +-Statement list (preceding, last_stmt)
+    | +-Statement list (preceding, last_stmt)
+    | | +-NULL
+    | | +-Assignment (left, right)
+    | |   +-Indexed (id, index)
+    | |   | +-Id (I_ARR) [INTEGER]
+    | |   | +-Sub (left, right) [INTEGER]
+    | |   |   +-Add (left, right) [INTEGER]
+    | |   |   | +-Integer [1]
+    | |   |   | +-Id (I) [INTEGER]
+    | |   |   +-Integer [1]
+    | |   +-Id (J) [INTEGER]
+    | +-Assignment (left, right)
+    |   +-Indexed (id, index)
+    |   | +-Id (I_ARR) [INTEGER]
+    |   | +-Indexed (id, index)
+    |   |   +-Id (I_ARR) [INTEGER]
+    |   |   +-Id (I) [INTEGER]
+    |   +-Sub (left, right) [INTEGER]
+    |     +-Indexed (id, index)
+    |     | +-Id (I_ARR) [INTEGER]
+    |     | +-Id (I) [INTEGER]
+    |     +-Id (J) [INTEGER]
+    +-Assignment (left, right)
+      +-Id (J) [INTEGER]
+      +-Sub (left, right) [INTEGER]
+        +-Id (J) [INTEGER]
+        +-Integer [1]
+
+Unoptimized AST for "MAX"
+Statement list (preceding, last_stmt)
++-NULL
++-If (condition, then, elsif, else)
+  +-Greater than (left, right) [INTEGER]
+  | +-Id (A) [INTEGER]
+  | +-Id (B) [INTEGER]
+  +-Statement list (preceding, last_stmt)
+  | +-NULL
+  | +-Return (value)
+  |   +-Id (A) [INTEGER]
+  +-Elsif list (preceding, last_elsif)
+  | +-NULL
+  | +-Elsif (condition, body)
+  |   +-Greater than (left, right) [INTEGER]
+  |   | +-Id (B) [INTEGER]
+  |   | +-Id (A) [INTEGER]
+  |   +-Statement list (preceding, last_stmt)
+  |     +-NULL
+  |     +-Return (value)
+  |       +-Id (B) [INTEGER]
+  +-Statement list (preceding, last_stmt)
+    +-NULL
+    +-Return (value)
+      +-Id (A) [INTEGER]
+
+Unoptimized AST for "DO_ZERO"
+Statement list (preceding, last_stmt)
++-Statement list (preceding, last_stmt)
+| +-NULL
+| +-Assignment (left, right)
+|   +-Id (Z) [INTEGER]
+|   +-Id (ZERO) [INTEGER]
++-Procedure call (procedure, arguments)
+  +-Id (WRITE) [VOID]
+  +-Expression list (preceding, last_expr)
+    +-NULL
+    +-Id (Z) [INTEGER]
+
+Unoptimized AST for "NASTY"
+Statement list (preceding, last_stmt)
++-Statement list (preceding, last_stmt)
+| +-Statement list (preceding, last_stmt)
+| | +-Statement list (preceding, last_stmt)
+| | | +-Statement list (preceding, last_stmt)
+| | | | +-Statement list (preceding, last_stmt)
+| | | | | +-NULL
+| | | | | +-Assignment (left, right)
+| | | | |   +-Id (I) [INTEGER]
+| | | | |   +-Id (J) [INTEGER]
+| | | | +-Assignment (left, right)
+| | | |   +-Id (X) [REAL]
+| | | |   +-Cast [REAL]
+| | | |     +-Unary minus (expr) [INTEGER]
+| | | |       +-Id (I) [INTEGER]
+| | | +-Assignment (left, right)
+| | |   +-Id (I) [INTEGER]
+| | |   +-Idiv (left, right) [INTEGER]
+| | |     +-Id (I) [INTEGER]
+| | |     +-Id (J) [INTEGER]
+| | +-Assignment (left, right)
+| |   +-Id (X) [REAL]
+| |   +-Divide (left, right) [REAL]
+| |     +-Cast [REAL]
+| |     | +-Id (I) [INTEGER]
+| |     +-Cast [REAL]
+| |       +-Id (J) [INTEGER]
+| +-Procedure call (procedure, arguments)
+|   +-Id (DO_ZERO) [VOID]
+|   +-NULL
++-If (condition, then, elsif, else)
+  +-And (left, right) [INTEGER]
+  | +-Equal (left, right) [INTEGER]
+  | | +-Id (X) [REAL]
+  | | +-Cast [REAL]
+  | |   +-Id (I) [INTEGER]
+  | +-Less than (left, right) [INTEGER]
+  |   +-Id (I) [INTEGER]
+  |   +-Id (J) [INTEGER]
+  +-Statement list (preceding, last_stmt)
+  | +-Statement list (preceding, last_stmt)
+  | | +-Statement list (preceding, last_stmt)
+  | | | +-Statement list (preceding, last_stmt)
+  | | | | +-NULL
+  | | | | +-Assignment (left, right)
+  | | | |   +-Id (I) [INTEGER]
+  | | | |   +-Function call (function, arguments) [INTEGER]
+  | | | |     +-Id (MAX) [INTEGER]
+  | | | |     +-Expression list (preceding, last_expr)
+  | | | |       +-Expression list (preceding, last_expr)
+  | | | |       | +-NULL
+  | | | |       | +-Id (I) [INTEGER]
+  | | | |       +-Id (Y) [REAL]
+  | | | +-Assignment (left, right)
+  | | |   +-Id (J) [INTEGER]
+  | | |   +-Integer [0]
+  | | +-Assignment (left, right)
+  | |   +-Id (X) [REAL]
+  | |   +-Cast [REAL]
+  | |     +-Integer [0]
+  | +-Assignment (left, right)
+  |   +-Id (Y) [REAL]
+  |   +-Cast [REAL]
+  |     +-Integer [0]
+  +-NULL
+  +-NULL
+
+Unoptimized AST for global level
+Statement list (preceding, last_stmt)
++-Statement list (preceding, last_stmt)
+| +-Statement list (preceding, last_stmt)
+| | +-Statement list (preceding, last_stmt)
+| | | +-Statement list (preceding, last_stmt)
+| | | | +-Statement list (preceding, last_stmt)
+| | | | | +-NULL
+| | | | | +-Assignment (left, right)
+| | | | |   +-Id (A) [INTEGER]
+| | | | |   +-Integer [1]
+| | | | +-Assignment (left, right)
+| | | |   +-Id (B) [INTEGER]
+| | | |   +-Integer [2]
+| | | +-Assignment (left, right)
+| | |   +-Id (X) [REAL]
+| | |   +-Cast [REAL]
+| | |     +-Integer [1]
+| | +-Assignment (left, right)
+| |   +-Id (Y) [REAL]
+| |   +-Real [3.14]
+| +-Procedure call (procedure, arguments)
+|   +-Id (INDEX) [VOID]
+|   +-Expression list (preceding, last_expr)
+|     +-NULL
+|     +-Id (A) [INTEGER]
++-Procedure call (procedure, arguments)
+  +-Id (NASTY) [VOID]
+  +-Expression list (preceding, last_expr)
+    +-Expression list (preceding, last_expr)
+    | +-Expression list (preceding, last_expr)
+    | | +-Expression list (preceding, last_expr)
+    | | | +-NULL
+    | | | +-Idiv (left, right) [INTEGER]
+    | | |   +-Integer [1]
+    | | |   +-Integer [2]
+    | | +-Integer [5]
+    | +-Divide (left, right) [REAL]
+    |   +-Cast [REAL]
+    |   | +-Integer [1]
+    |   +-Cast [REAL]
+    |     +-Integer [2]
+    +-Add (left, right) [REAL]
+      +-Real [8]
+      +-Cast [REAL]
+        +-Integer [7]

@@ -1,0 +1,60 @@
+digraph G
+{
+	node [shape=circle];
+
+	from [shape=none, label=""];
+	start [label=""];
+	from -> start;
+
+	semicolon [shape=doublecircle];
+	start -> semicolon [label=" ; "];
+
+	dot [shape=doublecircle]
+	start -> dot [label=" . "];
+
+	int[shape=doublecircle];
+	start -> int [label="[ 0 - 9 ]"];
+	int -> int [label="[ 0 - 9 ]"];
+
+	real1[label=real, shape=doublecircle];
+	int -> real1 [label=" . "];
+	dot -> real1 [label="[ 0 - 9 ]"];
+
+	real2[label=""];
+	real1 -> real2 [label=" E "];
+	int -> real2 [label=" E "];
+
+	real3[label=real, shape=doublecircle];
+	real2 -> real3 [label="[ 0 - 9 ]"];
+	real3 -> real3 [label="[ 0 - 9 ]"];
+
+	i[label=ident, shape=doublecircle];
+	if[shape=doublecircle];
+	e[label=ident, shape=doublecircle];
+	el[label=ident, shape=doublecircle];
+	els[label=ident, shape=doublecircle];
+	else[shape=doublecircle];
+	elsi[label=ident, shape=doublecircle];
+	elsif[shape=doublecircle];
+	ident[shape=doublecircle];
+
+	start -> i [label=" I "];
+	i -> if [label=" F "];
+	i -> ident [label="[ A - E  G - Z  0 - 9  _ ]"];
+	if -> ident [label="[ A - Z  0 - 9  _ ]"];
+
+	start -> e [label=" E "];
+	e -> el [label=" L "];
+	el -> els [label=" S "];
+	els -> else [label=" E "];
+	els -> elsi [label=" I "];
+	elsi -> elsif [label=" F "];
+	e -> ident [label="[ A - K  M - Z  0 - 9  _ ]"];
+	el -> ident [label="[ A - R  T - Z  0 - 9  _ ]"];
+	els -> ident [label="[ A - D  F - H  J - Z  0 - 9  _ ]"];
+	else -> ident [label="[ A - Z  0 - 9  _ ]"];
+	elsi -> ident [label="[ A - E  G - Z  0 - 9  _ ]"];
+	elsif -> ident [label="[ A - Z  0 - 9  _ ]"];
+
+	start -> ident [label="[ A - D  F - H  J - Z  _ ]"];
+}

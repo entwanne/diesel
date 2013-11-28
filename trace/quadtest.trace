@@ -1,0 +1,144 @@
+Symbol table will be printed after compilation.
+A quad list will be printed for each block.
+Quad list for "FOO"
+    1    q_itor     I          -          $1
+    2    q_rlt      $1         X          $2
+    3    q_jmpf     6          $2         -
+    4    q_iload    1          -          $3
+    5    q_iplus    I          $3         $4
+    6    q_iassign  $4         -          I
+    7    q_iload    1          -          $5
+    8    q_itor     $5         -          $6
+    9    q_rminus   X          $6         $7
+   10    q_rassign  $7         -          X
+   11    q_jmp      7          -          -
+   12    q_labl     6          -          -
+   13    q_itor     I          -          $8
+   14    q_rne      $8         X          $9
+   15    q_inot     $9         -          $10
+   16    q_jmpf     8          $10        -
+   17    q_jmp      7          -          -
+   18    q_labl     8          -          -
+   19    q_iload    0          -          $11
+   20    q_ine      I          $11        $12
+   21    q_jmpf     9          $12        -
+   22    q_iuminus  I          -          $13
+   23    q_iassign  $13        -          I
+   24    q_jmp      10         -          -
+   25    q_labl     9          -          -
+   26    q_iload    7          -          $14
+   27    q_iassign  $14        -          I
+   28    q_labl     10         -          -
+   29    q_iload    1          -          $15
+   30    q_itor     $15        -          $16
+   31    q_rplus    X          $16        $17
+   32    q_rassign  $17        -          X
+   33    q_iload    33         -          $18
+   34    q_param    $18        -          -
+   35    q_call     WRITE      1          (null)
+
+   36    q_labl     7          -          -
+   37    q_ireturn  5          I          -
+   38    q_labl     5          -          -
+
+Generating assembler for function "FOO"
+Quad list for global level
+    1    q_iload    2          -          $19
+    2    q_iload    1          -          $20
+    3    q_lindex   A          $20        $21
+    4    q_istore   $19        -          $21
+    5    q_iload    1          -          $22
+    6    q_irindex  A          $22        $23
+    7    q_iload    1          -          $24
+    8    q_irindex  A          $24        $25
+    9    q_iload    1          -          $26
+   10    q_iminus   $25        $26        $27
+   11    q_lindex   A          $27        $28
+   12    q_istore   $23        -          $28
+   13    q_iload    3          -          $29
+   14    q_itor     $29        -          $30
+   15    q_rassign  $30        -          X
+   16    q_param    X          -          -
+   17    q_call     TRUNC      1          $31
+   18    q_iassign  $31        -          I
+   19    q_iload    4          -          $32
+   20    q_itor     $32        -          $33
+   21    q_iload    4          -          $34
+   22    q_itor     $34        -          $35
+   23    q_iload    2          -          $36
+   24    q_itor     $36        -          $37
+   25    q_rdivide  $35        $37        $38
+   26    q_rplus    $33        $38        $39
+   27    q_rassign  $39        -          X
+   28    q_param    X          -          -
+   29    q_iload    3          -          $41
+   30    q_imult    $41        I          $42
+   31    q_param    $42        -          -
+   32    q_call     FOO        2          $40
+   33    q_iassign  $40        -          I
+   34    q_labl     15         -          -
+
+Generating assembler, global level
+
+Symbol table (size = 58):
+Pos  Name      Lev Hash Back Offs Type      Tag
+-----------------------------------------------
+  0: GLOBAL.     0   -1  159    0 GLOBAL.   SYM_PROC      lbl = -1 ar_size = 0
+  1: VOID        0   -1   82    0 VOID      SYM_NAMETYPE
+  2: INTEGER     0   -1  462    0 VOID      SYM_NAMETYPE
+  3: REAL        0   -1  324    0 VOID      SYM_NAMETYPE
+  4: READ        0   -1  316    0 INTEGER   SYM_FUNC      lbl = 0  ar_size = 0
+  5: WRITE       0   -1  139    0 VOID      SYM_PROC      lbl = 1  ar_size = 0
+  6: INT-ARG     0   -1  210    0 INTEGER   SYM_PARAM
+  7: TRUNC       0   -1  332    0 INTEGER   SYM_FUNC      lbl = 2  ar_size = 0
+  8: REAL-ARG    0   -1  427    0 REAL      SYM_PARAM
+  9: QUADTEST    0   -1  203    0 VOID      SYM_PROC      lbl = 3  ar_size = 144
+ 10: SIZE        1   -1  475    0 INTEGER   SYM_CONST     value = 10
+ 11: A           1   -1   65    0 INTEGER   SYM_ARRAY     card = 10
+ 12: I           1   -1   73   40 INTEGER   SYM_VAR
+ 13: X           1   -1   88   44 REAL      SYM_VAR
+ 14: FOO         1   -1   68    0 INTEGER   SYM_FUNC      lbl = 4  ar_size = 72
+ 15: I           2   12   73    0 INTEGER   SYM_PARAM
+ 16: X           2   13   88    4 REAL      SYM_PARAM     prec = I
+ 17: $1          2   -1  213    0 INTEGER   SYM_VAR
+ 18: $2          2   -1  214    4 INTEGER   SYM_VAR
+ 19: $3          2   -1  215    8 INTEGER   SYM_VAR
+ 20: $4          2   -1  216   12 INTEGER   SYM_VAR
+ 21: $5          2   -1  217   16 INTEGER   SYM_VAR
+ 22: $6          2   -1  218   20 INTEGER   SYM_VAR
+ 23: $7          2   -1  219   24 REAL      SYM_VAR
+ 24: $8          2   -1  220   28 INTEGER   SYM_VAR
+ 25: $9          2   -1  221   32 INTEGER   SYM_VAR
+ 26: $10         2   -1  421   36 INTEGER   SYM_VAR
+ 27: $11         2   -1  422   40 INTEGER   SYM_VAR
+ 28: $12         2   -1  423   44 INTEGER   SYM_VAR
+ 29: $13         2   -1  424   48 INTEGER   SYM_VAR
+ 30: $14         2   -1  425   52 INTEGER   SYM_VAR
+ 31: $15         2   -1  426   56 INTEGER   SYM_VAR
+ 32: $16         2    8  427   60 INTEGER   SYM_VAR
+ 33: $17         2   -1  428   64 REAL      SYM_VAR
+ 34: $18         2   -1  429   68 INTEGER   SYM_VAR
+ 35: $19         1   -1  430   48 INTEGER   SYM_VAR
+ 36: $20         1   -1  454   52 INTEGER   SYM_VAR
+ 37: $21         1   -1  455   56 INTEGER   SYM_VAR
+ 38: $22         1   -1  456   60 INTEGER   SYM_VAR
+ 39: $23         1   -1  457   64 INTEGER   SYM_VAR
+ 40: $24         1   -1  458   68 INTEGER   SYM_VAR
+ 41: $25         1   -1  459   72 INTEGER   SYM_VAR
+ 42: $26         1   -1  460   76 INTEGER   SYM_VAR
+ 43: $27         1   -1  461   80 INTEGER   SYM_VAR
+ 44: $28         1    2  462   84 INTEGER   SYM_VAR
+ 45: $29         1   -1  463   88 INTEGER   SYM_VAR
+ 46: $30         1   -1  487   92 INTEGER   SYM_VAR
+ 47: $31         1   -1  488   96 INTEGER   SYM_VAR
+ 48: $32         1   -1  489  100 INTEGER   SYM_VAR
+ 49: $33         1   -1  490  104 INTEGER   SYM_VAR
+ 50: $34         1   -1  491  108 INTEGER   SYM_VAR
+ 51: $35         1   -1  492  112 INTEGER   SYM_VAR
+ 52: $36         1   -1  493  116 INTEGER   SYM_VAR
+ 53: $37         1   -1  494  120 INTEGER   SYM_VAR
+ 54: $38         1   -1  495  124 REAL      SYM_VAR
+ 55: $39         1   -1  496  128 REAL      SYM_VAR
+ 56: $40         1   -1    8  132 INTEGER   SYM_VAR
+ 57: $41         1   -1    9  136 INTEGER   SYM_VAR
+ 58: $42         1   -1   10  140 INTEGER   SYM_VAR

@@ -1,0 +1,8 @@
+Type conflict, line 17, col 8: A function must return a value.
+Type conflict, line 25, col 8: Can't assign a real value to an integer variable.
+Type conflict, line 27, col 16: Type discrepancy between formal and actual parameters.
+Type conflict, line 28, col 16: Can't assign a real value to an integer variable.
+Type conflict, line 30, col 15: Procedures may not return a value.
+Type conflict, line 34, col 18: More actual than formal parameters.
+Type conflict, line 35, col 14: More formal than actual parameters.
+Type conflict, line 36, col 17: Type discrepancy between formal and actual parameters.

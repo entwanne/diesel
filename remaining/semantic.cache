@@ -1,0 +1,13 @@
+;; Object semantic.cache
+;; SEMANTICDB Tags save file
+(semanticdb-project-database "semantic.cache"
+  :file "semantic.cache"
+  :tables (list 
+   (semanticdb-table "parser.y"
+    :file "parser.y"
+    :pointmax 20130
+    :major-mode 'c-mode
+    :tokens '(("const_decl" variable "const_decls" nil nil nil [5623 5649]) ("var_decl" variable "var_decls" nil nil nil [6335 6357]) ("subprog_decl" variable "subprog_decls" nil nil nil [8542 8572]))
+    )
+   )
+  )
