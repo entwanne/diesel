@@ -33,8 +33,11 @@ extern YYLTYPE yylloc; // Used for position information, see below.
 
 DIGIT [0-9]
 INTEGER {DIGIT}+
-REAL {DIGIT}+"."{DIGIT}*
+	       //REAL {DIGIT}*"."{DIGIT}*(e[+-]?{DIGIT}+)?
+EXPOSANT e[+-]?{DIGIT}+
+REAL {DIGIT}+"."{DIGIT}*{EXPOSANT}?|{DIGIT}+{EXPOSANT}|"."{DIGIT}+{EXPOSANT}?
 ID [a-z_][a-z0-9_]*
+STRINGCHAR [^\'\n]|\'\'
 /* Position information is entered into the yylloc variable, so we will be
    able to generate good error messages later in later phases. */
 /* Your code should be entered below the %%. Expressions to handle the 
@@ -254,9 +257,11 @@ procedure			{yylloc.first_line=yylineno;
                                     yylloc.first_line=yylineno;
 				    yylloc.first_column=column;
 				    column += yyleng;
+				    char* name = strdup(yytext);
 				    for (int i = 0; i < yyleng; ++i)
-				      yytext[i] = toupper(yytext[i]);
-				    yylval.pool_p = sym_tab->pool_install(yytext);
+				      name[i] = toupper(yytext[i]);
+				    yylval.pool_p = sym_tab->pool_install(name);
+				    free(name);
 				    return T_IDENT;
 				}
 
@@ -271,39 +276,27 @@ procedure			{yylloc.first_line=yylineno;
                                 }
 
 
-\'                              {
-                                    yylloc.first_line = yylineno;
-                                    yylloc.first_column = column;
-                                    column += yyleng;
-
-                                    string_buf.str("'");
-
-                                    BEGIN(string);
-                                }
-
-<string>
-{
-    \'\'                        {
-                                    column += 2;
-                                    string_buf << '\'';
-                                }
-    \'                          {
-                                    column++;
-                                    yylloc.last_column = column;
-                                    
-				    string_buf << "'";
-				    yylval.str = sym_tab->pool_install(strdup(string_buf.str().c_str()));
-                                    BEGIN(INITIAL);
-                                    return T_STRINGCONST;
-                                }
-    \n                          {
-                                    yyerror("Newline in string");
-                                }
-    .                           {
-                                    column++;
-                                    string_buf << yytext;
-                                }
+				/*\'([^\']|\'\')+\' {*/
+  \'{STRINGCHAR}*\' {
+                                    yylloc.first_line=yylineno;
+				    yylloc.first_column=column;
+				    column += yyleng;
+				    int size = strlen(yytext);
+				    char* s = (char*)malloc(size - 2);
+				    int j = 0;
+				    for (int i = 1; i < size - 1; ++i, ++j)
+				      {
+					s[j] = yytext[i];
+					if (yytext[i] == '\'')
+					  ++i;
+				      }
+				    s[j] = 0;
+				    yylval.pool_p = sym_tab->pool_install(s);
+				    free(s);
+				    return T_STRINGCONST;
 }
+\'{STRINGCHAR}*\n                   yyerror("Newline in string");
+
 
 <c_comment>
 {
