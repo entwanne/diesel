@@ -291,7 +291,7 @@ procedure			{yylloc.first_line=yylineno;
 					  ++i;
 				      }
 				    s[j] = 0;
-				    yylval.pool_p = sym_tab->pool_install(s);
+				    yylval.str = sym_tab->pool_install(s);
 				    free(s);
 				    return T_STRINGCONST;
 }
