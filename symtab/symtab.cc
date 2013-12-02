@@ -663,7 +663,7 @@ sym_index symbol_table::install_symbol(const pool_index pool_p,
 	    	// Return index to the symbol we just created.
     		// return 0;
   sym_index sym_p = lookup_symbol(pool_p);
-  if (sym_p != NULL_SYM)
+  if (sym_p != NULL_SYM && get_symbol(sym_p)->level == current_level)
 	return sym_p;
   symbol* sym;
   switch (tag)
@@ -695,6 +695,7 @@ sym_index symbol_table::install_symbol(const pool_index pool_p,
 	};
   hash_index hash_p = hash(pool_p);
   sym->hash_link = hash_table[hash_p];
+  sym->type = void_type;
   sym->level = current_level;
   sym_table[++sym_pos] = sym;
   hash_table[hash_p] = sym_pos;
