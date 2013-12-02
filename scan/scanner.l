@@ -277,18 +277,7 @@ procedure			{yylloc.first_line=yylineno;
                                     yylloc.first_line=yylineno;
 				    yylloc.first_column=column;
 				    column += yyleng;
-				    int size = strlen(yytext);
-				    char* s = (char*)malloc(size - 2);
-				    int j = 0;
-				    for (int i = 1; i < size - 1; ++i, ++j)
-				      {
-					s[j] = yytext[i];
-					if (yytext[i] == '\'')
-					  ++i;
-				      }
-				    s[j] = 0;
-				    yylval.str = sym_tab->pool_install(s);
-				    free(s);
+				    yylval.str = sym_tab->pool_install(sym_tab->fix_string(yytext));
 				    return T_STRINGCONST;
 }
 \'{STRINGCHAR}*\n                   yyerror("Newline in string");
