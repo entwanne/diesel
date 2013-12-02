@@ -257,11 +257,7 @@ procedure			{yylloc.first_line=yylineno;
                                     yylloc.first_line=yylineno;
 				    yylloc.first_column=column;
 				    column += yyleng;
-				    char* name = strdup(yytext);
-				    for (int i = 0; i < yyleng; ++i)
-				      name[i] = toupper(yytext[i]);
-				    yylval.pool_p = sym_tab->pool_install(name);
-				    free(name);
+				    yylval.pool_p = sym_tab->pool_install(sym_tab->capitalize(yytext));
 				    return T_IDENT;
 				}
 
