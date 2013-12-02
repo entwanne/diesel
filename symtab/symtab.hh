@@ -99,6 +99,7 @@ public:
 
     // Constructor.
     symbol(pool_index);
+    virtual ~symbol() {}
   
     // Currently lacks print method/operator.
     // Currently lacks some other needed stuff like conversions to and

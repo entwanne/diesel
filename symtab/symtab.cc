@@ -550,14 +550,29 @@ char *symbol_table::fix_string(const char *old_str) {
  void symbol_table::open_scope() {
  /*  Your code here. */
    ++current_level;
+   block_table[current_level] = sym_pos;
 }
 
 
 /* Decrease the current_level by one. Return sym_index to new environment. */
 sym_index symbol_table::close_scope() {
   /*  Your code here. */
+  for (sym_index sym_p = sym_pos; sym_p > block_table[current_level]; --sym_p)
+  	{
+  	  hash_index hash_p = hash(get_symbol_id(sym_p));
+  	  if (hash_table[hash_p] == sym_p)
+  		{
+		  symbol* sym = get_symbol(sym_p);
+  		  hash_table[hash_p] = sym->hash_link;
+  		  if (hash_table[hash_p] != NULL_SYM)
+  			get_symbol(hash_table[hash_p])->back_link = NULL_SYM;
+  		  // delete sym;
+		  // sym_table[sym_p] = NULL;
+  		}
+  	  // else: error, symbol is necessary the last entered in the hash table
+  	}
   --current_level;
-  return NULL_SYM;
+  return block_table[current_level];
 }
 
 
@@ -695,9 +710,12 @@ sym_index symbol_table::install_symbol(const pool_index pool_p,
 	};
   hash_index hash_p = hash(pool_p);
   sym->hash_link = hash_table[hash_p];
+  sym->back_link = NULL_SYM;
   sym->type = void_type;
   sym->level = current_level;
   sym_table[++sym_pos] = sym;
+  if (hash_table[hash_p] != NULL_SYM)
+	get_symbol(hash_table[hash_p])->back_link = sym_pos;
   hash_table[hash_p] = sym_pos;
   return sym_pos;
 }

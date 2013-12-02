@@ -10,14 +10,14 @@ using namespace std;
 // the corresponding trace file to be generated, and 0 otherwise.
 
 // Simulate a diesel program.
-#define TEST_TRACE1 0
+#define TEST_TRACE1 1
 
 // Simulate a diesel program with an erroneous redeclaration (TEST_TRACE must
 // also be 1 for this to be run). 
-#define TEST_REDECLARATION 0
+#define TEST_REDECLARATION 1
 
 // Test all enter_ methods in the symbol table.
-#define TEST_TRACE2 1
+#define TEST_TRACE2 0
 
 
 YYSTYPE yylval;
