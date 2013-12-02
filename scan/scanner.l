@@ -257,7 +257,9 @@ procedure			{yylloc.first_line=yylineno;
                                     yylloc.first_line=yylineno;
 				    yylloc.first_column=column;
 				    column += yyleng;
-				    yylval.pool_p = sym_tab->pool_install(sym_tab->capitalize(yytext));
+				    char* s = sym_tab->capitalize(yytext);
+				    yylval.pool_p = sym_tab->pool_install(s);
+				    free(s);
 				    return T_IDENT;
 				}
 
@@ -277,7 +279,9 @@ procedure			{yylloc.first_line=yylineno;
                                     yylloc.first_line=yylineno;
 				    yylloc.first_column=column;
 				    column += yyleng;
-				    yylval.str = sym_tab->pool_install(sym_tab->fix_string(yytext));
+				    char* s = sym_tab->fix_string(yytext);
+				    yylval.str = sym_tab->pool_install(s);
+				    free(s);
 				    return T_STRINGCONST;
 }
 \'{STRINGCHAR}*\n                   yyerror("Newline in string");
