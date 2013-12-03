@@ -1,5 +1,5 @@
 %{
-#include <iostream.h>
+#include <iostream>
 #include "semantic.hh"
 #include "optimize.hh"
 #include "codegen.hh"

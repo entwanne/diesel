@@ -9,7 +9,7 @@
 
 using namespace std;
 
-extern void yyparse();
+extern int yyparse();
 extern int yydebug;
 int assembler_trace = 0;
 int print_ast = 0;
