@@ -14,7 +14,7 @@ using namespace std;
 
 // Simulate a diesel program with an erroneous redeclaration (TEST_TRACE must
 // also be 1 for this to be run). 
-#define TEST_REDECLARATION 1
+#define TEST_REDECLARATION 0
 
 // Test all enter_ methods in the symbol table.
 #define TEST_TRACE2 0

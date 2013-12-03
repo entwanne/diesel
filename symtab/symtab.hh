@@ -93,7 +93,8 @@ public:
     sym_type     tag;        // Describes what kind of symbol this is.
     sym_index    type;       // Type: integer_type, real_type, or void_type.
     sym_index    hash_link;  // Link to other symbols with same hash key.
-    sym_index    back_link;  // Link back to the hash table. 
+    // sym_index    back_link;  // Link back to the hash table. 
+    hash_index    back_link;  // Link back to the hash table. 
     block_level  level;      // Current block level, ie, nesting depth. 
     int          offset;     // Offset, used in code generation. 
 
