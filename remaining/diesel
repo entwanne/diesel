@@ -22,8 +22,9 @@
 
 # Some useful variables.
 #set -e
-as=/usr/ccs/bin/as
-cc=/sw/gcc-3.4.6/bin/gcc
+#as=/usr/ccs/bin/as
+#cc=/sw/gcc-3.4.6/bin/gcc
+cc=gcc
 #cc=/sw/lang-5.1/opt/SUNWspro/bin/cc
 cpp=/usr/ccs/lib/cpp
 cppopts=
@@ -96,7 +97,8 @@ fi
 # Try to compile. Note that most arguments are passed on as is to the
 # compiler (see main.cc)
 
-$cpp -C -P $source | ./compiler $print_symtab_flag $print_ast_flag $debug_flag $no_typecheck_flag $no_optimized_ast_flag $no_quads_flag $print_quads_flag $no_assembler_flag $trace_flag
+#$cpp -C -P $source | ./compiler $print_symtab_flag $print_ast_flag $debug_flag $no_typecheck_flag $no_optimized_ast_flag $no_quads_flag $print_quads_flag $no_assembler_flag $trace_flag
+./compiler $print_symtab_flag $print_ast_flag $debug_flag $no_typecheck_flag $no_optimized_ast_flag $no_quads_flag $print_quads_flag $no_assembler_flag $trace_flag < $source
 
 if [ $? -ne 0 ]; then
 	exit $?
