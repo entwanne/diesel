@@ -268,7 +268,12 @@ sym_index ast_greaterthan::type_check() {
 
 sym_index ast_procedurecall::type_check() {
     /* Your code here. */
-    
+    id->type_check();
+
+    if (parameter_list)
+	parameter_list->type_check();
+    check_parameters(id, parameter_list);
+
     return void_type;
 }
 
@@ -361,8 +366,13 @@ sym_index ast_return::type_check() {
 
 sym_index ast_functioncall::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    sym_index ret_type = id->type_check();
+
+    if (parameter_list)
+	parameter_list->type_check();
+    check_parameters(id, parameter_list);
+
+    return ret_type;
 }
 
 sym_index ast_uminus::type_check() {
