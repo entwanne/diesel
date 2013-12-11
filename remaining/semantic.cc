@@ -51,12 +51,16 @@ int semantic::chk_param(ast_id *env,
     }
     sym_index ptype = actuals->last_expr->type_check();
     if(formals->type != ptype) {
-	type_error(actuals->last_expr->pos) << "Received "
-					    << sym_tab->pool_lookup(sym_tab->get_symbol_id(ptype))
-					    << " but "
-					    << sym_tab->pool_lookup(sym_tab->get_symbol_id(formals->type))
-					    << " was excpected at function/procedure call\n";
-	return 0;
+	if (formals->type == real_type && ptype == integer_type)
+	    actuals->last_expr = new ast_cast(actuals->last_expr->pos, actuals->last_expr);
+	else {
+	    type_error(actuals->last_expr->pos) << "Received "
+						<< sym_tab->pool_lookup(sym_tab->get_symbol_id(ptype))
+						<< " but "
+						<< sym_tab->pool_lookup(sym_tab->get_symbol_id(formals->type))
+						<< " was excpected at function/procedure call\n";
+	    return 0;
+	}
     }
     return chk_param(env, formals->preceding, actuals->preceding);
 }
@@ -182,13 +186,16 @@ sym_index semantic::check_binop1(ast_binaryoperation *node) {
     if(rtype != integer_type && rtype != real_type)
 	type_error(node->right->pos) << "Operand has to be of type integer or real\n";
 
-    if(ltype == rtype)
+    if(ltype == rtype) {
+	node->type = ltype;
 	return ltype;
+    }
 
     if(ltype == integer_type)
 	node->left = new ast_cast(node->left->pos, node->left);
     else
 	node->right = new ast_cast(node->right->pos, node->right);
+    node->type = real_type;
     return real_type;
 }
 
@@ -231,6 +238,7 @@ sym_index semantic::check_binop2(ast_binaryoperation *node, char const *s) {
     if(type != integer_type)
 	type_error(node->right->pos) << "Operand of " << s
 				     << " operation has to be of type integer or real\n";
+    node->type = integer_type;
     return integer_type;
 }
 
