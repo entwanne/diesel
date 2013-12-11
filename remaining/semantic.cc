@@ -231,31 +231,32 @@ sym_index ast_mod::type_check() {
    the same way. They all return integer types, 1 = true, 0 = false. */
 sym_index semantic::check_binrel(ast_binaryrelation *node) {
     /* Your code here. */
-    return void_type;
-    
+    sym_index type = node->left->type_check();
+    if(type != integer_type)
+	type_error(node->left->pos) << "Binary relation can only be performed with integers";
+    type = node->right->type_check();
+    if(type != integer_type)
+	type_error(node->right->pos) << "Binary relation can only be performed with integers";
+    return integer_type;
 }
 
 sym_index ast_equal::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binrel(this);
 }
 
 sym_index ast_notequal::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binrel(this);
 }
 
 sym_index ast_lessthan::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binrel(this);
 }
 
 sym_index ast_greaterthan::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binrel(this);
 }
 
