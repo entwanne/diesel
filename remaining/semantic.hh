@@ -26,7 +26,7 @@ public:
     // comp_stmt and subprog_decl in parser.y.
     
     sym_index            check_binop1(ast_binaryoperation *);
-    sym_index            check_binop2(ast_binaryoperation *, char *);
+    sym_index            check_binop2(ast_binaryoperation *, char const *);
     sym_index            check_binrel(ast_binaryrelation *);
 };
 

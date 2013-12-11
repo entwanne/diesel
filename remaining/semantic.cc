@@ -146,27 +146,27 @@ sym_index semantic::check_binop1(ast_binaryoperation *node) {
 
 sym_index ast_add::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    // return void_type;
+    return type_checker->check_binop1(this);
 }
 
 sym_index ast_sub::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    // return void_type;
+    return type_checker->check_binop1(this);
 }
 
 sym_index ast_mult::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    // return void_type;
+    return type_checker->check_binop1(this);
 }
 
 
 sym_index ast_divide::type_check() {
     /* Your code here. */
-    return void_type;
-     
+    // return void_type;
+    return type_checker->check_binop1(this);
 }
 
 
@@ -177,7 +177,7 @@ sym_index ast_divide::type_check() {
    good error message.
    
    */
-sym_index semantic::check_binop2(ast_binaryoperation *node, char *s) {
+sym_index semantic::check_binop2(ast_binaryoperation *node, char const *s) {
     /* Your code here. */
     return void_type;
     
@@ -185,26 +185,26 @@ sym_index semantic::check_binop2(ast_binaryoperation *node, char *s) {
 
 sym_index ast_or::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    // return void_type;
+    return type_checker->check_binop2(this, "OR");
 }
 
 sym_index ast_and::type_check() {
     /* Your code here. */
-    return void_type;
-        
+    // return void_type;
+    return type_checker->check_binop2(this, "AND");
 }
 
 sym_index ast_idiv::type_check() {
     /* Your code here. */
-    return void_type;
-        
+    // return void_type;
+    return type_checker->check_binop2(this, "DIV");
 }
 
 sym_index ast_mod::type_check() {
     /* Your code here. */
-    return void_type;
-        
+    // return void_type;
+    return type_checker->check_binop2(this, "MOD");
 }
 
 
@@ -219,26 +219,26 @@ sym_index semantic::check_binrel(ast_binaryrelation *node) {
 
 sym_index ast_equal::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    // return void_type;
+    return type_checker->check_binrel(this);
 }
 
 sym_index ast_notequal::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    // return void_type;
+    return type_checker->check_binrel(this);
 }
 
 sym_index ast_lessthan::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    // return void_type;
+    return type_checker->check_binrel(this);
 }
 
 sym_index ast_greaterthan::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    // return void_type;
+    return type_checker->check_binrel(this);
 }
 
 
@@ -355,9 +355,3 @@ sym_index ast_integer::type_check() {
 sym_index ast_real::type_check() {
     return real_type;
 }
-
-
-
-
-
-	    
