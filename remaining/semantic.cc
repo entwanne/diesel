@@ -217,7 +217,13 @@ sym_index ast_mult::type_check() {
 
 sym_index ast_divide::type_check() {
     /* Your code here. */
-    return type_checker->check_binop1(this);
+    type = type_checker->check_binop1(this);
+    if(type == integer_type){
+	left = new ast_cast(left->pos, left);
+	right = new ast_cast(right->pos, right);
+    }
+    type = real_type;
+    return type;
 }
 
 
@@ -233,11 +239,11 @@ sym_index semantic::check_binop2(ast_binaryoperation *node, char const *s) {
     sym_index type = node->left->type_check();
     if(type != integer_type)
 	type_error(node->left->pos) << "Operand of " << s
-				    << " operation has to be of type integer or real\n";
+				    << " operation has to be an integer\n";
     type = node->right->type_check();
     if(type != integer_type)
 	type_error(node->right->pos) << "Operand of " << s
-				     << " operation has to be of type integer or real\n";
+				     << " operation has to be an integer\n";
     node->type = integer_type;
     return integer_type;
 }
