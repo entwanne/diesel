@@ -102,7 +102,10 @@ sym_index ast_stmt_list::type_check() {
 /* Type check a list of expressions. */
 sym_index ast_expr_list::type_check() {
     /* Your code here. */
-    
+    if(preceding != NULL)
+	preceding->type_check();
+    if(last_expr != NULL)
+	last_expr->type_check();
     return void_type;
 }
 
@@ -111,7 +114,10 @@ sym_index ast_expr_list::type_check() {
 /* Type check an elsif list. */
 sym_index ast_elsif_list::type_check() {
     /* Your code here. */
-    
+    if(preceding != NULL)
+	preceding->type_check();
+    if(last_elsif != NULL)
+	last_elsif->type_check();
     return void_type;
 }
 
@@ -128,8 +134,11 @@ sym_index ast_id::type_check() {
 
 sym_index ast_indexed::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    // return void_type;
+    id->type_check();
+    if(index->type_check() != integer_type)
+	type_error(index->pos) << "Array index has to be an integer.\n";
+    return void_type; // Must return type of object
 }
 
 
@@ -138,10 +147,24 @@ sym_index ast_indexed::type_check() {
    in which implicit casting of integer to real is done: plus, minus,
    multiplication. We synthesize type information as well. */   
 sym_index semantic::check_binop1(ast_binaryoperation *node) {
-    return void_type;
+    // return void_type;
     /* Your code here. You don't have to use this method, but it might be
        convenient. */
-    
+    sym_index ltype = node->left->type_check();
+    if(ltype != integer_type && ltype != real_type)
+	type_error(node->left->pos) << "Operand has to be of type integer or real";
+    sym_index rtype = node->right->type_check();
+    if(rtype != integer_type && rtype != real_type)
+	type_error(node->right->pos) << "Operand has to be of type integer or real";
+
+    if(ltype == rtype)
+	return ltype;
+
+    if(ltype == integer_type)
+	node->left = new ast_cast(node->left->pos, node->left);
+    else
+	node->right = new ast_cast(node->right->pos, node->right);
+    return real_type;
 }
 
 sym_index ast_add::type_check() {
