@@ -39,8 +39,26 @@ int semantic::chk_param(ast_id *env,
 			parameter_symbol *formals,
 			ast_expr_list *actuals) {
     /* Your code here. */
-    return 1;
-    
+    if(!formals && !actuals)
+	return 1;
+    if(!formals) {
+	type_error(env->pos) << "Too many parameters to function/procedure call\n";
+	return 0;
+    }
+    if(!actuals || !actuals->last_expr) {
+	type_error(env->pos) << "Not enough parameters to function/procedure call\n";
+	return 0;
+    }
+    sym_index ptype = actuals->last_expr->type_check();
+    if(formals->type != ptype) {
+	type_error(actuals->last_expr->pos) << "Received "
+					    << sym_tab->pool_lookup(sym_tab->get_symbol_id(ptype))
+					    << " but "
+					    << sym_tab->pool_lookup(sym_tab->get_symbol_id(formals->type))
+					    << " was excpected at function/procedure call\n";
+	return 0;
+    }
+    return chk_param(env, formals->preceding, actuals->preceding);
 }
 
 
@@ -48,7 +66,14 @@ int semantic::chk_param(ast_id *env,
 void semantic::check_parameters(ast_id *call_id,
 				ast_expr_list *param_list) {
     /* Your code here. */
-    
+    symbol* caller = sym_tab->get_symbol(call_id->sym_p);
+    if(caller->tag == SYM_FUNC)
+	chk_param(call_id, caller->get_function_symbol()->last_parameter, param_list);
+    else if(caller->tag == SYM_PROC)
+	chk_param(call_id, caller->get_procedure_symbol()->last_parameter, param_list);
+    else
+	type_error(call_id->pos) << sym_tab->pool_lookup(sym_tab->get_symbol_id(call_id->sym_p))
+				 << " is neither a function or a procedure\n";
 }
 
 
@@ -139,7 +164,7 @@ sym_index ast_indexed::type_check() {
     if(index->type_check() != integer_type)
 	type_error(index->pos) << "Array index has to be an integer.\n";
 
-    return type; // Must return type of object
+    return type;
 }
 
 
@@ -235,12 +260,6 @@ sym_index ast_mod::type_check() {
    the same way. They all return integer types, 1 = true, 0 = false. */
 sym_index semantic::check_binrel(ast_binaryrelation *node) {
     /* Your code here. */
-    // sym_index type = node->left->type_check();
-    // if(type != integer_type)
-    // 	type_error(node->left->pos) << "Binary relation can only be performed with integers\n";
-    // type = node->right->type_check();
-    // if(type != integer_type)
-    // 	type_error(node->right->pos) << "Binary relation can only be performed with integers\n";
     sym_index ltype = node->left->type_check();
     if(ltype != integer_type && ltype != real_type)
     	type_error(node->left->pos) << "Binary relation can only be performed with integers or reals\n";
@@ -286,8 +305,8 @@ sym_index ast_procedurecall::type_check() {
     /* Your code here. */
     id->type_check();
 
-    if (parameter_list)
-	parameter_list->type_check();
+    // if (parameter_list)
+    // 	parameter_list->type_check();
     type_checker->check_parameters(id, parameter_list);
 
     return void_type;
@@ -391,8 +410,8 @@ sym_index ast_functioncall::type_check() {
     /* Your code here. */
     sym_index ret_type = id->type_check();
 
-    if (parameter_list)
-	parameter_list->type_check();
+    // if (parameter_list)
+    // 	parameter_list->type_check();
     type_checker->check_parameters(id, parameter_list);
 
     return ret_type;
