@@ -702,7 +702,7 @@ sym_index symbol_table::install_symbol(const pool_index pool_p,
   hash_index hash_p = hash(pool_p);
   sym->hash_link = hash_table[hash_p];
   sym->back_link = hash_p;
-  sym->type = 0;
+  sym->type = void_type;
   sym->level = current_level;
   sym_table[++sym_pos] = sym;
   hash_table[hash_p] = sym_pos;
