@@ -134,10 +134,12 @@ sym_index ast_id::type_check() {
 
 sym_index ast_indexed::type_check() {
     /* Your code here. */
-    id->type_check();
+    sym_index type = id->type_check();
+
     if(index->type_check() != integer_type)
 	type_error(index->pos) << "Array index has to be an integer.\n";
-    return void_type; // Must return type of object
+
+    return type; // Must return type of object
 }
 
 
