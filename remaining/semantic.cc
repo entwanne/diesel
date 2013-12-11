@@ -235,12 +235,26 @@ sym_index ast_mod::type_check() {
    the same way. They all return integer types, 1 = true, 0 = false. */
 sym_index semantic::check_binrel(ast_binaryrelation *node) {
     /* Your code here. */
-    sym_index type = node->left->type_check();
-    if(type != integer_type)
-	type_error(node->left->pos) << "Binary relation can only be performed with integers\n";
-    type = node->right->type_check();
-    if(type != integer_type)
-	type_error(node->right->pos) << "Binary relation can only be performed with integers\n";
+    // sym_index type = node->left->type_check();
+    // if(type != integer_type)
+    // 	type_error(node->left->pos) << "Binary relation can only be performed with integers\n";
+    // type = node->right->type_check();
+    // if(type != integer_type)
+    // 	type_error(node->right->pos) << "Binary relation can only be performed with integers\n";
+    sym_index ltype = node->left->type_check();
+    if(ltype != integer_type && ltype != real_type)
+    	type_error(node->left->pos) << "Binary relation can only be performed with integers or reals\n";
+    sym_index rtype = node->left->type_check();
+    if(rtype != integer_type && rtype != real_type)
+    	type_error(node->right->pos) << "Binary relation can only be performed with integers or reals\n";
+
+    if (ltype != rtype)
+	{
+	    if(ltype == integer_type)
+		node->left = new ast_cast(node->left->pos, node->left);
+	    else
+		node->right = new ast_cast(node->right->pos, node->right);
+	}
     return integer_type;
 }
 
@@ -285,11 +299,18 @@ sym_index ast_assign::type_check() {
     sym_index ltype = lhs->type_check();
     sym_index rtype = rhs->type_check();
     if (ltype != rtype)
-	type_error(pos) << "Error when assigning value of type "
-			<< sym_tab->pool_lookup(sym_tab->get_symbol_id(rtype))
-			<< " to variable of type "
-			<< sym_tab->pool_lookup(sym_tab->get_symbol_id(ltype))
-			<< "\n";
+	{
+	    if (ltype == real_type && rtype == integer_type)
+		{
+		    rhs = new ast_cast(rhs->pos, rhs);
+		    return real_type;
+		}
+	    type_error(pos) << "Error when assigning value of type "
+			    << sym_tab->pool_lookup(sym_tab->get_symbol_id(rtype))
+			    << " to variable of type "
+			    << sym_tab->pool_lookup(sym_tab->get_symbol_id(ltype))
+			    << "\n";
+	}
     return ltype;
 }
 
