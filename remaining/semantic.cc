@@ -277,7 +277,7 @@ sym_index semantic::check_binrel(ast_binaryrelation *node) {
     sym_index ltype = node->left->type_check();
     if(ltype != integer_type && ltype != real_type)
     	type_error(node->left->pos) << "Binary relation can only be performed with integers or reals\n";
-    sym_index rtype = node->left->type_check();
+    sym_index rtype = node->right->type_check();
     if(rtype != integer_type && rtype != real_type)
     	type_error(node->right->pos) << "Binary relation can only be performed with integers or reals\n";
 
@@ -288,6 +288,7 @@ sym_index semantic::check_binrel(ast_binaryrelation *node) {
 	    else
 		node->right = new ast_cast(node->right->pos, node->right);
 	}
+    node->type = integer_type;
     return integer_type;
 }
 
