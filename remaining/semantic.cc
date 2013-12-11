@@ -367,21 +367,30 @@ sym_index ast_functioncall::type_check() {
 
 sym_index ast_uminus::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    sym_index type = expr->type_check();
+    if (type != integer_type && type != real_type)
+	type_error(pos) << "Applying unary minus on invalid type\n";
+    return type;
 }
 
 sym_index ast_not::type_check() {
     /* Your code here. */
-    return void_type;
-       
+    if (expr->type_check() != integer_type)
+	type_error(pos) << "Applying unary not on non-integer type\n";
+    return integer_type;
 }
 
 
 sym_index ast_elsif::type_check() {
     /* Your code here. */
+    if(condition->type_check() != integer_type)
+	type_error(condition->pos) << "elsif predicate must be of integer "
+				   << "type.\n";
+
+    if(body != NULL)
+	body->type_check();
+
     return void_type;
-        
 }
 
 
