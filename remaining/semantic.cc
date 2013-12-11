@@ -150,10 +150,10 @@ sym_index semantic::check_binop1(ast_binaryoperation *node) {
        convenient. */
     sym_index ltype = node->left->type_check();
     if(ltype != integer_type && ltype != real_type)
-	type_error(node->left->pos) << "Operand has to be of type integer or real";
+	type_error(node->left->pos) << "Operand has to be of type integer or real\n";
     sym_index rtype = node->right->type_check();
     if(rtype != integer_type && rtype != real_type)
-	type_error(node->right->pos) << "Operand has to be of type integer or real";
+	type_error(node->right->pos) << "Operand has to be of type integer or real\n";
 
     if(ltype == rtype)
 	return ltype;
@@ -198,10 +198,12 @@ sym_index semantic::check_binop2(ast_binaryoperation *node, char const *s) {
     /* Your code here. */
     sym_index type = node->left->type_check();
     if(type != integer_type)
-	type_error(node->left->pos) << "Operand of " << s << " operation has to be of type integer or real";
+	type_error(node->left->pos) << "Operand of " << s
+				    << " operation has to be of type integer or real\n";
     type = node->right->type_check();
     if(type != integer_type)
-	type_error(node->right->pos) << "Operand of " << s << " operation has to be of type integer or real";
+	type_error(node->right->pos) << "Operand of " << s
+				     << " operation has to be of type integer or real\n";
     return integer_type;
 }
 
@@ -233,10 +235,10 @@ sym_index semantic::check_binrel(ast_binaryrelation *node) {
     /* Your code here. */
     sym_index type = node->left->type_check();
     if(type != integer_type)
-	type_error(node->left->pos) << "Binary relation can only be performed with integers";
+	type_error(node->left->pos) << "Binary relation can only be performed with integers\n";
     type = node->right->type_check();
     if(type != integer_type)
-	type_error(node->right->pos) << "Binary relation can only be performed with integers";
+	type_error(node->right->pos) << "Binary relation can only be performed with integers\n";
     return integer_type;
 }
 
