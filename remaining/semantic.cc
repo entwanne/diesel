@@ -275,8 +275,15 @@ sym_index ast_procedurecall::type_check() {
 
 sym_index ast_assign::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    sym_index ltype = lhs->type_check();
+    sym_index rtype = rhs->type_check();
+    if (ltype != rtype)
+	type_error(pos) << "Error when assigning value of type "
+			<< sym_tab->pool_lookup(sym_tab->get_symbol_id(rtype))
+			<< " to variable of type "
+			<< sym_tab->pool_lookup(sym_tab->get_symbol_id(ltype))
+			<< "\n";
+    return ltype;
 }
 
 
