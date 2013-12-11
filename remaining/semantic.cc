@@ -292,8 +292,18 @@ sym_index ast_while::type_check() {
 
 sym_index ast_if::type_check() {
     /* Your code here. */
-    return void_type;
-    
+    if(condition->type_check() != integer_type)
+	type_error(condition->pos) << "if predicate must be of integer "
+				   << "type.\n";
+
+    if(body != NULL)
+	body->type_check();
+    if(elsif_list != NULL)
+	elsif_list->type_check();
+    if(else_body != NULL)
+	else_body->type_check();
+
+    return void_type;    
 }
 
 
