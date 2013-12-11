@@ -274,7 +274,7 @@ sym_index ast_procedurecall::type_check() {
 
     if (parameter_list)
 	parameter_list->type_check();
-    check_parameters(id, parameter_list);
+    type_checker->check_parameters(id, parameter_list);
 
     return void_type;
 }
@@ -372,7 +372,7 @@ sym_index ast_functioncall::type_check() {
 
     if (parameter_list)
 	parameter_list->type_check();
-    check_parameters(id, parameter_list);
+    type_checker->check_parameters(id, parameter_list);
 
     return ret_type;
 }
