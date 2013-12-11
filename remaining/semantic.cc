@@ -134,7 +134,6 @@ sym_index ast_id::type_check() {
 
 sym_index ast_indexed::type_check() {
     /* Your code here. */
-    // return void_type;
     id->type_check();
     if(index->type_check() != integer_type)
 	type_error(index->pos) << "Array index has to be an integer.\n";
@@ -147,7 +146,6 @@ sym_index ast_indexed::type_check() {
    in which implicit casting of integer to real is done: plus, minus,
    multiplication. We synthesize type information as well. */   
 sym_index semantic::check_binop1(ast_binaryoperation *node) {
-    // return void_type;
     /* Your code here. You don't have to use this method, but it might be
        convenient. */
     sym_index ltype = node->left->type_check();
@@ -169,26 +167,22 @@ sym_index semantic::check_binop1(ast_binaryoperation *node) {
 
 sym_index ast_add::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binop1(this);
 }
 
 sym_index ast_sub::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binop1(this);
 }
 
 sym_index ast_mult::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binop1(this);
 }
 
 
 sym_index ast_divide::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binop1(this);
 }
 
@@ -202,31 +196,32 @@ sym_index ast_divide::type_check() {
    */
 sym_index semantic::check_binop2(ast_binaryoperation *node, char const *s) {
     /* Your code here. */
-    return void_type;
-    
+    sym_index type = node->left->type_check();
+    if(type != integer_type)
+	type_error(node->left->pos) << "Operand of " << s << " operation has to be of type integer or real";
+    type = node->right->type_check();
+    if(type != integer_type)
+	type_error(node->right->pos) << "Operand of " << s << " operation has to be of type integer or real";
+    return integer_type;
 }
 
 sym_index ast_or::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binop2(this, "OR");
 }
 
 sym_index ast_and::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binop2(this, "AND");
 }
 
 sym_index ast_idiv::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binop2(this, "DIV");
 }
 
 sym_index ast_mod::type_check() {
     /* Your code here. */
-    // return void_type;
     return type_checker->check_binop2(this, "MOD");
 }
 
