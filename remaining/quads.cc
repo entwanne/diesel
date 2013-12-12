@@ -335,27 +335,37 @@ void ast_expr_list::generate_parameter_list(quad_list &q,
 					    parameter_symbol *last_param,
 					    int *nr_params) {
     /* Your code here. */
-    if(last_param == NULL)
-	return;
-    ++(*nr_params);
-    // q += new quadruple(q_param, last_param, NULL_SYM, NULL_SYM);
-    generate_parameter_list(q, last_param->preceding, nr_params);
+    if(last_expr) {
+	++(*nr_params);
+	sym_index param_p = last_expr->generate_quads(q);
+	q += new quadruple(q_param, param_p, NULL_SYM, NULL_SYM);
+    }
+    if (preceding)
+	// preceding->generate_parameter_list(q, last_param->preceding, nr_params);
+	preceding->generate_parameter_list(q, NULL, nr_params);
 }
 
 
 /* Generate quads for a procedure call. */
 sym_index ast_procedurecall::generate_quads(quad_list &q) {
     /* Your code here. */
+    int nr_params = 0;
+    sym_index caller_p = id->generate_quads(q);
+    parameter_list->generate_parameter_list(q, NULL, &nr_params);
+    q += new quadruple(q_call, caller_p, nr_params, NULL_SYM);
     return NULL_SYM;
-    
 }
  
 
 /* Generate quads for a function call. */
 sym_index ast_functioncall::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    int nr_params = 0;
+    sym_index caller_p = id->generate_quads(q);
+    parameter_list->generate_parameter_list(q, NULL, &nr_params);
+    sym_index sym_p = sym_tab->gen_temp_var(type);
+    q += new quadruple(q_call, caller_p, nr_params, sym_p);
+    return sym_p;
 }
 
 
