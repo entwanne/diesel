@@ -203,53 +203,52 @@ sym_index ast_cast::generate_quads(quad_list &q) {
     return sym_p;
 }
 
+static sym_index generate_quads_binop(quad_list& q, quad_op_type op, ast_binaryoperation* binop) {
+    sym_index left_p = binop->left->generate_quads(q);
+    sym_index right_p = binop->right->generate_quads(q);
+    sym_index sym_p = sym_tab->gen_temp_var(binop->type);
+    q += new quadruple(op, left_p, right_p, sym_p);
+    return sym_p;
+}
 
 sym_index ast_add::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-        
+    return generate_quads_binop(q, (type == integer_type ? q_iplus : q_rplus), this);
 }
 				   
 sym_index ast_sub::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binop(q, (type == integer_type ? q_iminus : q_rminus), this);
 }
 				   
 sym_index ast_mult::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binop(q, (type == integer_type ? q_imult : q_rmult), this);
 }
 				   
 sym_index ast_divide::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binop(q, q_rdivide, this);
 }
 				   
 sym_index ast_idiv::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binop(q, q_idivide, this);
 }
 				   
 sym_index ast_mod::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binop(q, q_imod, this);
 }
 
 sym_index ast_or::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binop(q, q_ior, this);
 }
 				   
 sym_index ast_and::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binop(q, q_iand, this);
 }
 				   
 
