@@ -176,22 +176,31 @@ sym_index ast_real::generate_quads(quad_list &q) {
 
 sym_index ast_not::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    sym_index val_p = expr->generate_quads(q);
+    sym_index sym_p = sym_tab->gen_temp_var(integer_type);
+    q += new quadruple(q_inot, val_p, NULL_SYM, sym_p);
+    return sym_p;
 }
 
 
 sym_index ast_uminus::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    sym_index val_p = expr->generate_quads(q);
+    sym_index sym_p = sym_tab->gen_temp_var(type);
+    if(type == integer_type)
+	q += new quadruple(q_iuminus, val_p, NULL_SYM, sym_p);
+    else
+	q += new quadruple(q_ruminus, val_p, NULL_SYM, sym_p);
+    return sym_p;
 }
 
 
 sym_index ast_cast::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    sym_index val_p = expr->generate_quads(q);
+    sym_index sym_p = sym_tab->gen_temp_var(real_type);
+    q += new quadruple(q_itor, val_p, NULL_SYM, sym_p);
+    return sym_p;
 }
 
 
