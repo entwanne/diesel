@@ -94,9 +94,9 @@ void ast_expr_list::optimize() {
 void ast_elsif_list::optimize() {
     /* Your code here. */
     if(preceding != NULL)
-	preceding->type_check();
+	preceding->optimize();
     if(last_elsif != NULL)
-	last_elsif->type_check();
+	last_elsif->optimize();
 }
 
 
