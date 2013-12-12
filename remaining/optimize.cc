@@ -114,7 +114,20 @@ void ast_indexed::optimize() {
 }
 
 
-
+static ast_expression* fold_constants_id(ast_expression* node)
+{
+    if(node->tag == AST_ID) {
+	ast_id* id = node->get_ast_id();
+	if(sym_tab->get_symbol_tag(id->sym_p) == SYM_CONST) {
+	    constant_symbol* csym = sym_tab->get_symbol(id->sym_p)->get_constant_symbol();
+	    if(csym->type == integer_type)
+		node = new ast_integer(node->pos, csym->const_value.ival);
+	    else
+		node = new ast_real(node->pos, csym->const_value.rval);
+	}
+    }
+    return node;
+}
 
 /* This convenience method is used to apply constant folding to all 
    binary operations. It returns either the resulting optimized node or the
@@ -128,87 +141,62 @@ ast_expression *ast_optimizer::fold_constants(ast_expression *node) {
 	return node;
     ast_node_type tag = node->tag;
     ast_binaryoperation* op = node->get_ast_binaryoperation();
-    ast_expression* left = op->left;
-    ast_expression* right = op->right;
-    if(left->tag == AST_ID) {
-	ast_id* id = left->get_ast_id();
-	if(sym_tab->get_symbol_tag(id->sym_p) == SYM_CONST) {
-	    constant_symbol* csym = sym_tab->get_symbol(id->sym_p)->get_constant_symbol();
-	    if(csym->type == integer_type)
-		left = new ast_integer(left->pos, csym->const_value.ival);
-	    else
-		left = new ast_real(left->pos, csym->const_value.rval);
-	    op->left = left;
-	}
-    }
-    if(right->tag == AST_ID) {
-	ast_id* id = right->get_ast_id();
-	if(sym_tab->get_symbol_tag(id->sym_p) == SYM_CONST) {
-	    constant_symbol* csym = sym_tab->get_symbol(id->sym_p)->get_constant_symbol();
-	    if(csym->type == integer_type)
-		right = new ast_integer(right->pos, csym->const_value.ival);
-	    else
-		right = new ast_real(right->pos, csym->const_value.rval);
-	    op->right = right;
-	}
-    }
-    if ((left->tag != AST_INTEGER && left->tag != AST_REAL) || right->tag != left->tag)
+    op->left = fold_constants_id(op->left);
+    op->right = fold_constants_id(op->right);
+    if ((op->left->tag != AST_INTEGER && op->left->tag != AST_REAL) || op->right->tag != op->left->tag)
 	return node;
-    // delete node;
-    if(left->tag == AST_INTEGER) {
-	int ileft = left->get_ast_integer()->value;
-	int iright = right->get_ast_integer()->value;
+    if(op->left->tag == AST_INTEGER) {
+	int ileft = op->left->get_ast_integer()->value;
+	int iright = op->right->get_ast_integer()->value;
 	switch(tag) {
 	    case AST_ADD:
-		node = new ast_integer(left->pos, ileft + iright);
+		node = new ast_integer(op->left->pos, ileft + iright);
 		break;
 	    case AST_SUB:
-		node = new ast_integer(left->pos, ileft - iright);
+		node = new ast_integer(op->left->pos, ileft - iright);
 		break;
 	    case AST_OR:
-		node = new ast_integer(left->pos, ileft || iright);
+		node = new ast_integer(op->left->pos, ileft || iright);
 		break;
 	    case AST_AND:
-		node = new ast_integer(left->pos, ileft && iright);
+		node = new ast_integer(op->left->pos, ileft && iright);
 		break;
 	    case AST_MULT:
-		node = new ast_integer(left->pos, ileft * iright);
+		node = new ast_integer(op->left->pos, ileft * iright);
 		break;
 	    case AST_DIVIDE:
-		node = new ast_real(left->pos, (float) ileft / (float) iright);
+		node = new ast_real(op->left->pos, (float) ileft / (float) iright);
 		break;
 	    case AST_IDIV:
-		node = new ast_integer(left->pos, ileft / iright);
+		node = new ast_integer(op->left->pos, ileft / iright);
 		break;
 	    case AST_MOD:
-		node = new ast_integer(left->pos, ileft % iright);
+		node = new ast_integer(op->left->pos, ileft % iright);
 		break;
 	    default:
 		break;
 	}
     }
     else {
-	float rleft = left->get_ast_real()->value;
-	float rright = right->get_ast_real()->value;
+	float rleft = op->left->get_ast_real()->value;
+	float rright = op->right->get_ast_real()->value;
 	switch(tag) {
 	    case AST_ADD:
-		node = new ast_real(left->pos, rleft + rright);
+		node = new ast_real(op->left->pos, rleft + rright);
 		break;
 	    case AST_SUB:
-		node = new ast_real(left->pos, rleft - rright);
+		node = new ast_real(op->left->pos, rleft - rright);
 		break;
 	    case AST_MULT:
-		node = new ast_real(left->pos, rleft * rright);
+		node = new ast_real(op->left->pos, rleft * rright);
 		break;
 	    case AST_DIVIDE:
-		node = new ast_real(left->pos, rleft / rright);
+		node = new ast_real(op->left->pos, rleft / rright);
 		break;
 	    default:
 		break;
 	}
     }
-    // delete left;
-    // delete right;
     return node;
 }
 
