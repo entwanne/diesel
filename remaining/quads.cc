@@ -138,6 +138,7 @@ sym_index ast_elsif_list::generate_quads(quad_list &q) {
 sym_index ast_elsif::generate_quads(quad_list& q) {
     USE_Q;
     /* Your code here. */
+    fatal("Trying to call generate_quads for ast_elsif. Try 'generate_quads_and_jump' instead.");
     return NULL_SYM;
     
 }
@@ -361,9 +362,9 @@ sym_index ast_procedurecall::generate_quads(quad_list &q) {
 sym_index ast_functioncall::generate_quads(quad_list &q) {
     /* Your code here. */
     int nr_params = 0;
+    sym_index sym_p = sym_tab->gen_temp_var(type);
     sym_index caller_p = id->generate_quads(q);
     parameter_list->generate_parameter_list(q, NULL, &nr_params);
-    sym_index sym_p = sym_tab->gen_temp_var(type);
     q += new quadruple(q_call, caller_p, nr_params, sym_p);
     return sym_p;
 }
@@ -472,8 +473,12 @@ sym_index ast_return::generate_quads(quad_list &q) {
 /* Generate quads for an array reference. */
 sym_index ast_indexed::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    sym_index id_p = id->generate_quads(q);
+    sym_index index_p = index->generate_quads(q);
+    sym_index sym_p = sym_tab->gen_temp_var(id->type);
+    q += new quadruple((id->type == integer_type ? q_irindex : q_rrindex),
+		       id_p, index_p, sym_p);
+    return sym_p;
 }
 
 
