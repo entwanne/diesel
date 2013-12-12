@@ -163,7 +163,7 @@ sym_index ast_id::type_check() {
 
 sym_index ast_indexed::type_check() {
     /* Your code here. */
-    sym_index type = id->type_check();
+    type = id->type_check();
 
     if(index->type_check() != integer_type)
 	type_error(index->pos) << "Array index has to be an integer.\n";
@@ -425,16 +425,15 @@ sym_index ast_functioncall::type_check() {
     /* Your code here. */
     sym_index ret_type = id->type_check();
 
-    // if (parameter_list)
-    // 	parameter_list->type_check();
     type_checker->check_parameters(id, parameter_list);
+    type = ret_type;
 
     return ret_type;
 }
 
 sym_index ast_uminus::type_check() {
     /* Your code here. */
-    sym_index type = expr->type_check();
+    type = expr->type_check();
     if (type != integer_type && type != real_type)
 	type_error(pos) << "Applying unary minus on invalid type\n";
     return type;
@@ -444,6 +443,7 @@ sym_index ast_not::type_check() {
     /* Your code here. */
     if (expr->type_check() != integer_type)
 	type_error(pos) << "Applying unary not on non-integer type\n";
+    type = integer_type;
     return integer_type;
 }
 
