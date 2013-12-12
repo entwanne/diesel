@@ -182,8 +182,13 @@ long symbol_table::get_next_label() {
    an error. This method is used for quad generation. */
 sym_index symbol_table::gen_temp_var(sym_index type) {
     // Your code here.
-
-    return NULL_SYM;    
+    if (type != integer_type && type != real_type)
+	fatal("Invalid temporary variable type");
+    std::ostringstream oss;
+    ++temp_nr;
+    oss << '$' << temp_nr;
+    pool_index pool_p = pool_install(oss.str().c_str());
+    return enter_variable(pool_p, type);
 }
 
 

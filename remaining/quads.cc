@@ -759,8 +759,3 @@ ostream& operator<<(ostream& o, quad_list *q_list) {
 	o << "Quad list: NULL\n";
     return o;
 }
-    
-	    
-	    
-	    
-	    
