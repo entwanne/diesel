@@ -83,14 +83,20 @@ void ast_stmt_list::optimize() {
 /* Optimize a list of expressions. */
 void ast_expr_list::optimize() {
     /* Your code here. */
-    
+    if(preceding != NULL)
+	preceding->optimize();
+    if(last_expr != NULL)
+	last_expr->optimize();
 }
 
 
 /* Optimize an elsif list. */
 void ast_elsif_list::optimize() {
     /* Your code here. */
-    
+    if(preceding != NULL)
+	preceding->type_check();
+    if(last_elsif != NULL)
+	last_elsif->type_check();
 }
 
 
@@ -103,6 +109,8 @@ void ast_id::optimize() {
 
 void ast_indexed::optimize() {
 /* Your code here. */
+    id->optimize();
+    index->optimize();
 }
 
 
@@ -155,22 +163,26 @@ void ast_mod::optimize() {
 /* We can apply constant folding to binary relations as well. */
 void ast_equal::optimize() {
     /* Your code here. */
-    
+    left->optimize();
+    right->optimize();
 }
 
 void ast_notequal::optimize() {
     /* Your code here. */
-    
+    left->optimize();
+    right->optimize();
 }
 
 void ast_lessthan::optimize() {
     /* Your code here. */
-    
+    left->optimize();
+    right->optimize();
 }
 
 void ast_greaterthan::optimize() {
     /* Your code here. */
-    
+    left->optimize();
+    right->optimize();
 }
 
 
@@ -179,51 +191,67 @@ void ast_greaterthan::optimize() {
 
 void ast_procedurecall::optimize() {
 /* Your code here. */
+    id->optimize();
+    parameter_list->optimize();
 }
 
 
 void ast_assign::optimize() {
     /* Your code here. */
-    
+    lhs->optimize();
+    rhs->optimize();
 }
 
 
 void ast_while::optimize() {
     /* Your code here. */
-    
+    condition->optimize();
+    if(body != NULL)
+	body->optimize();
 }
     
 
 void ast_if::optimize() {
     /* Your code here. */
-    
+    condition->optimize();
+    if(body != NULL)
+	body->optimize();
+    if(elsif_list != NULL)
+	elsif_list->optimize();
+    if(else_body != NULL)
+	else_body->optimize();
 }
 
 
 void ast_return::optimize() {
     /* Your code here. */
-    
+    if (value != NULL)
+	value->optimize();
 }
 
 
 void ast_functioncall::optimize() {
 /* Your code here. */
+    id->optimize();
+    parameter_list->optimize();
 }
 
 void ast_uminus::optimize() {
     /* Your code here. */
-    
+    expr->optimize();
 }
 
 void ast_not::optimize() {
     /* Your code here. */
-    
+    expr->optimize();
 }
 
 
 void ast_elsif::optimize() {
     /* Your code here. */
-    
+    condition->optimize();
+    if(body != NULL)
+	body->optimize();
 }
 
 
@@ -239,7 +267,7 @@ void ast_real::optimize() {
 
 void ast_cast::optimize() {
     /* Your code here. */
-    
+    expr->optimize();
 }
 
 
