@@ -121,9 +121,72 @@ void ast_indexed::optimize() {
    original node if no optimization could be performed. */
 ast_expression *ast_optimizer::fold_constants(ast_expression *node) {
     /* Your code here. */
-    if (!node)
+    if(node == NULL)
 	return NULL;
     node->optimize();
+    if(!is_binop(node))
+	return node;
+    ast_node_type tag = node->tag;
+    ast_binaryoperation* op = node->get_ast_binaryoperation();
+    ast_expression* left = op->left;
+    ast_expression* right = op->right;
+    if ((left->tag != AST_INTEGER && left->tag != AST_REAL) || right->tag != left->tag)
+	return node;
+    // delete node;
+    if(left->tag == AST_INTEGER) {
+	int ileft = left->get_ast_integer()->value;
+	int iright = right->get_ast_integer()->value;
+	switch(tag) {
+	    case AST_ADD:
+		node = new ast_integer(left->pos, ileft + iright);
+		break;
+	    case AST_SUB:
+		node = new ast_integer(left->pos, ileft - iright);
+		break;
+	    case AST_OR:
+		node = new ast_integer(left->pos, ileft | iright);
+		break;
+	    case AST_AND:
+		node = new ast_integer(left->pos, ileft & iright);
+		break;
+	    case AST_MULT:
+		node = new ast_integer(left->pos, ileft * iright);
+		break;
+	    case AST_DIVIDE:
+		node = new ast_real(left->pos, (float) ileft / (float) iright);
+		break;
+	    case AST_IDIV:
+		node = new ast_integer(left->pos, ileft / iright);
+		break;
+	    case AST_MOD:
+		node = new ast_integer(left->pos, ileft % iright);
+		break;
+	    default:
+		break;
+	}
+    }
+    else {
+	float rleft = left->get_ast_real()->value;
+	float rright = right->get_ast_real()->value;
+	switch(tag) {
+	    case AST_ADD:
+		node = new ast_real(left->pos, rleft + rright);
+		break;
+	    case AST_SUB:
+		node = new ast_real(left->pos, rleft - rright);
+		break;
+	    case AST_MULT:
+		node = new ast_real(left->pos, rleft * rright);
+		break;
+	    case AST_DIVIDE:
+		node = new ast_real(left->pos, rleft / rright);
+		break;
+	    default:
+		break;
+	}
+    }
+    // delete left;
+    // delete right;
     return node;
 }
 
