@@ -130,6 +130,28 @@ ast_expression *ast_optimizer::fold_constants(ast_expression *node) {
     ast_binaryoperation* op = node->get_ast_binaryoperation();
     ast_expression* left = op->left;
     ast_expression* right = op->right;
+    if(left->tag == AST_ID) {
+	ast_id* id = left->get_ast_id();
+	if(sym_tab->get_symbol_tag(id->sym_p) == SYM_CONST) {
+	    constant_symbol* csym = sym_tab->get_symbol(id->sym_p)->get_constant_symbol();
+	    if(csym->type == integer_type)
+		left = new ast_integer(left->pos, csym->const_value.ival);
+	    else
+		left = new ast_real(left->pos, csym->const_value.rval);
+	    op->left = left;
+	}
+    }
+    if(right->tag == AST_ID) {
+	ast_id* id = right->get_ast_id();
+	if(sym_tab->get_symbol_tag(id->sym_p) == SYM_CONST) {
+	    constant_symbol* csym = sym_tab->get_symbol(id->sym_p)->get_constant_symbol();
+	    if(csym->type == integer_type)
+		right = new ast_integer(right->pos, csym->const_value.ival);
+	    else
+		right = new ast_real(right->pos, csym->const_value.rval);
+	    op->right = right;
+	}
+    }
     if ((left->tag != AST_INTEGER && left->tag != AST_REAL) || right->tag != left->tag)
 	return node;
     // delete node;
@@ -144,10 +166,10 @@ ast_expression *ast_optimizer::fold_constants(ast_expression *node) {
 		node = new ast_integer(left->pos, ileft - iright);
 		break;
 	    case AST_OR:
-		node = new ast_integer(left->pos, ileft | iright);
+		node = new ast_integer(left->pos, ileft || iright);
 		break;
 	    case AST_AND:
-		node = new ast_integer(left->pos, ileft & iright);
+		node = new ast_integer(left->pos, ileft && iright);
 		break;
 	    case AST_MULT:
 		node = new ast_integer(left->pos, ileft * iright);
