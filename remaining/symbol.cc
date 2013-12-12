@@ -175,7 +175,7 @@ void symbol::print(ostream& o) {
 /* Output stream operator for easy printing of symbol information. */
 ostream& operator<<(ostream& o, symbol *sym) {
     if(sym == NULL)
-	return o << "(null)" << endl;
+	return o << "(null)";
     
     sym->print(o);
     return o;
