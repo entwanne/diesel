@@ -403,23 +403,53 @@ sym_index ast_while::generate_quads(quad_list &q) {
 
 /* Generate quads for an individual elsif statement, including an ending
    jump to an end label. See ast_if::generate_quads for more information. */
-void ast_elsif::generate_quads_and_jump(quad_list& q, int label) {
+void ast_elsif::generate_quads_and_jump(quad_list& q, int label_end) {
     /* Your code here. */
-    
+    int label_after = sym_tab->get_next_label();
+
+    sym_index cond_p = condition->generate_quads(q);
+    q += new quadruple(q_jmpf, label_after, cond_p, NULL_SYM);
+
+    if(body != NULL)
+	body->generate_quads(q);
+    q += new quadruple(q_jmp, label_end, NULL_SYM, NULL_SYM);
+    q += new quadruple(q_labl, label_after, NULL_SYM, NULL_SYM);
 }
 
 
 /* Generate quads (with an ending jump to an end label) for an elsif list.
    See generate_quads for ast_if for more information. */
-void ast_elsif_list::generate_quads_and_jump(quad_list &q, int label) {
+void ast_elsif_list::generate_quads_and_jump(quad_list &q, int label_end) {
     /* Your code here. */
-    
+    if(preceding != NULL)
+    	preceding->generate_quads_and_jump(q, label_end);
+    if(last_elsif != NULL)
+    	last_elsif->generate_quads_and_jump(q, label_end);
 }
 
 
 /* Generate quads for an if statement. */
 sym_index ast_if::generate_quads(quad_list &q) {
     /* Your code here. */
+    int label_after = sym_tab->get_next_label();
+    int label_end = sym_tab->get_next_label();
+
+    sym_index cond_p = condition->generate_quads(q);
+    q += new quadruple(q_jmpf, label_after, cond_p, NULL_SYM);
+
+    if(body != NULL)
+	body->generate_quads(q);
+    q += new quadruple(q_jmp, label_end, NULL_SYM, NULL_SYM);
+    q += new quadruple(q_labl, label_after, NULL_SYM, NULL_SYM);
+
+    if(elsif_list != NULL)
+    	elsif_list->generate_quads_and_jump(q, label_end);
+
+    if(else_body != NULL)
+	else_body->generate_quads(q);
+
+    q += new quadruple(q_labl, label_end, NULL_SYM, NULL_SYM);
+
     return NULL_SYM;
     
 }
@@ -428,8 +458,14 @@ sym_index ast_if::generate_quads(quad_list &q) {
 /* Generate quads for a return statement. */
 sym_index ast_return::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    if(value != NULL) {
+	sym_index ret_p = value->generate_quads(q);
+	q += new quadruple((value->type == integer_type ? q_ireturn : q_rreturn),
+			   q.last_label, ret_p, NULL_SYM);
+    }
+    else
+	q += new quadruple(q_ireturn, q.last_label, NULL_SYM, NULL_SYM);
+    return NULL_SYM;    
 }
 
 
