@@ -335,7 +335,11 @@ void ast_expr_list::generate_parameter_list(quad_list &q,
 					    parameter_symbol *last_param,
 					    int *nr_params) {
     /* Your code here. */
-    
+    if(last_param == NULL)
+	return;
+    ++(*nr_params);
+    // q += new quadruple(q_param, last_param, NULL_SYM, NULL_SYM);
+    generate_parameter_list(q, last_param->preceding, nr_params);
 }
 
 
