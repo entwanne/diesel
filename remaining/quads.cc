@@ -263,22 +263,22 @@ static sym_index generate_quads_binrel(quad_list& q, quad_op_type op, ast_binary
 
 sym_index ast_equal::generate_quads(quad_list &q) {
     /* Your code here. */
-    return generate_quads_binrel(q, (type == integer_type ? q_ieq : q_req), this);
+    return generate_quads_binrel(q, (left->type == integer_type ? q_ieq : q_req), this);
 }
 				   
 sym_index ast_notequal::generate_quads(quad_list &q) {
     /* Your code here. */
-    return generate_quads_binrel(q, (type == integer_type ? q_ine : q_rne), this);
+    return generate_quads_binrel(q, (left->type == integer_type ? q_ine : q_rne), this);
 }
 				   
 sym_index ast_lessthan::generate_quads(quad_list &q) {
     /* Your code here. */
-    return generate_quads_binrel(q, (type == integer_type ? q_ilt : q_rlt), this);
+    return generate_quads_binrel(q, (left->type == integer_type ? q_ilt : q_rlt), this);
 }
 				   
 sym_index ast_greaterthan::generate_quads(quad_list &q) {
     /* Your code here. */
-    return generate_quads_binrel(q, (type == integer_type ? q_igt : q_rgt), this);
+    return generate_quads_binrel(q, (left->type == integer_type ? q_igt : q_rgt), this);
 }
 				   
 
