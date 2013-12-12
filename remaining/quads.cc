@@ -250,31 +250,34 @@ sym_index ast_and::generate_quads(quad_list &q) {
     /* Your code here. */
     return generate_quads_binop(q, q_iand, this);
 }
-				   
 
+
+static sym_index generate_quads_binrel(quad_list& q, quad_op_type op, ast_binaryrelation* binrel) {
+    sym_index left_p = binrel->left->generate_quads(q);
+    sym_index right_p = binrel->right->generate_quads(q);
+    sym_index sym_p = sym_tab->gen_temp_var(integer_type);
+    q += new quadruple(op, left_p, right_p, sym_p);
+    return sym_p;
+}
 
 sym_index ast_equal::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binrel(q, (type == integer_type ? q_ieq : q_req), this);
 }
 				   
 sym_index ast_notequal::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binrel(q, (type == integer_type ? q_ine : q_rne), this);
 }
 				   
 sym_index ast_lessthan::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binrel(q, (type == integer_type ? q_ilt : q_rlt), this);
 }
 				   
 sym_index ast_greaterthan::generate_quads(quad_list &q) {
     /* Your code here. */
-    return NULL_SYM;
-    
+    return generate_quads_binrel(q, (type == integer_type ? q_igt : q_rgt), this);
 }
 				   
 
