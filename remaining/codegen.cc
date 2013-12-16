@@ -104,6 +104,10 @@ void code_generator::prologue(symbol *new_env) {
 	    << long_symbols << ")" << endl;
 
     /* Your code here. */
+    out << "\t\t" << "set" << "\t-" << ar_size << ",%l0" << endl
+	<< "\t\t" << "save" << "\t" << "%sp,%l0,%sp" << endl;
+    // out << "!!!" << last_arg->size << last_arg->preceding << endl;
+    // store, move
     
     out << flush;    
 }
@@ -118,6 +122,10 @@ void code_generator::epilogue(symbol *old_env) {
 	out << "\t" << "! EPILOGUE (" << short_symbols << old_env
 	    << long_symbols << ")" << endl;
     /* Your code here. */
+
+    // ld
+    out << "\t\t" << "ret" << endl
+	<< "\t\t" << "restore" << endl;
     
     out << flush;    
 }
@@ -128,7 +136,14 @@ void code_generator::epilogue(symbol *old_env) {
    a parameter. Note the pass-by-reference arguments. */
 void code_generator::find(sym_index sym_p, int *level, int *offset) {
     /* Your code here. */
-    
+    if(sym_p == NULL_SYM) {
+	*level = 0;
+	*offset = 0;
+	return ;
+    }
+    symbol* sym = sym_tab->get_symbol(sym_p);
+    *level = sym->level;
+    *offset = sym->offset;
 }
 
 
@@ -137,7 +152,11 @@ void code_generator::find(sym_index sym_p, int *level, int *offset) {
    register. */
 void code_generator::fetch(sym_index sym_p, register_type dest) {
     /* Your code here. */
-    
+    int level, offset;
+    find(sym_p, &level, &offset);
+    out << "\t\t" << "ld" << "\t[%g" << level
+	<< std::showpos << offset << std::noshowpos
+	<< "]," << reg[static_cast<int>(dest)] << endl;
 }
 
 
@@ -145,7 +164,13 @@ void code_generator::fetch(sym_index sym_p, register_type dest) {
 /* This function stores the value of a register into a variable. */
 void code_generator::store(register_type src, sym_index sym_p) {
     /* Your code here. */
-    
+    int level, offset;
+    find(sym_p, &level, &offset);
+    // out << "store: " << reg[static_cast<int>(src)] << ", " << level << ", " << offset << endl;
+    out << "\t\t" << "st" << "\t" << reg[static_cast<int>(src)]
+	<< ",[%g" << level
+	<< std::showpos << offset << std::noshowpos
+	<< "]" << endl;
 }
 
 
@@ -153,7 +178,7 @@ void code_generator::store(register_type src, sym_index sym_p) {
 /* This function fetches the base address of an array. */
 void code_generator::array_address(sym_index sym_p, register_type dest) {
     /* Your code here. */
-    
+    out << "kikoo4" << endl;
 }
 
 
