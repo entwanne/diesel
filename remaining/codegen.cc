@@ -107,7 +107,9 @@ void code_generator::prologue(symbol *new_env) {
     out << "\t\t" << "set" << "\t-" << ar_size << ",%l0" << endl
 	<< "\t\t" << "save" << "\t" << "%sp,%l0,%sp" << endl;
     // out << "!!!" << last_arg->size << last_arg->preceding << endl;
-    // store, move
+    out << "\t\t" << "st" << endl
+	<< "\t\t" << "mov" << endl
+	<< "\t\t" << "st" << endl;
     
     out << flush;    
 }
@@ -195,6 +197,8 @@ void code_generator::expand(quad_list *q_list) {
     
     // We use this iterator to loop through the quad list.
     quad_list_iterator *ql_iterator = new quad_list_iterator(q_list);
+
+    symbol* sym;
     
     q = ql_iterator->get_current(); // This is the head of the list.
     
@@ -459,11 +463,20 @@ void code_generator::expand(quad_list *q_list) {
 		
 	    case q_param:
 		/* Your code here. */
+		out << "\t\t" << "set" << endl;
 		
 		break;
 		
 	    case q_call:
 		/* Your code here. */
+		sym = sym_tab->get_symbol(q->sym1);
+		if(sym->tag == SYM_PROC)
+		    label = sym->get_procedure_symbol()->label_nr;
+		else
+		    label = sym->get_function_symbol()->label_nr;
+		out << "\t\t" << "call" << "\tL" << label
+		    << "! " << sym_tab->pool_lookup(sym->id) << endl
+		    << "\t\t" << "nop" << endl;
 		
 		break;
 		
