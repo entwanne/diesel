@@ -104,12 +104,19 @@ void code_generator::prologue(symbol *new_env) {
 	    << long_symbols << ")" << endl;
 
     /* Your code here. */
-    out << "\t\t" << "set" << "\t-" << ar_size << ",%l0" << endl
+    out << "\t\t" << "set" << "\t" << -ar_size << ",%l0" << endl
 	<< "\t\t" << "save" << "\t" << "%sp,%l0,%sp" << endl;
+    int level = new_env->level + 1;
     // out << "!!!" << last_arg->size << last_arg->preceding << endl;
-    out << "\t\t" << "st" << endl
-	<< "\t\t" << "mov" << endl
-	<< "\t\t" << "st" << endl;
+    out << "\t\t" << "st" << "\t%g" << level << ",[%fp"
+	<< std::showpos << DISPLAY_REG_OFFSET << std::noshowpos << "]" << endl
+	<< "\t\t" << "mov" << "\t%fp,%g" << level << endl;
+    int offset = FIRST_ARG_OFFSET;
+    for(int narg = 0; last_arg; ++narg, last_arg = last_arg->preceding) {
+	out << "\t\t" << "st" << "\t%i" << narg << ",[%fp"
+	    << std::showpos << offset << std::noshowpos << "]" << endl;
+	offset += last_arg->size;
+    }
     
     out << flush;    
 }
@@ -125,8 +132,9 @@ void code_generator::epilogue(symbol *old_env) {
 	    << long_symbols << ")" << endl;
     /* Your code here. */
 
-    // ld
-    out << "\t\t" << "ret" << endl
+    out << "\t\t" << "ld" << "\t[%fp" << std::showpos << DISPLAY_REG_OFFSET << std::noshowpos
+	<< "],%g" << old_env->level + 1 << endl
+	<< "\t\t" << "ret" << endl
 	<< "\t\t" << "restore" << endl;
     
     out << flush;    
@@ -193,12 +201,10 @@ void code_generator::expand(quad_list *q_list) {
     //int nr_args;            // Used for parameter generation.
     
     long quad_nr = 0;       // Just to make debug output easier to read.
-    //symbol *tmp;            // Used for safe downcasting.
+    symbol *sym;            // Used for safe downcasting.
     
     // We use this iterator to loop through the quad list.
     quad_list_iterator *ql_iterator = new quad_list_iterator(q_list);
-
-    symbol* sym;
     
     q = ql_iterator->get_current(); // This is the head of the list.
     
