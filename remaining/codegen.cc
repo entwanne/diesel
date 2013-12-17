@@ -157,6 +157,10 @@ void code_generator::find(sym_index sym_p, int *level, int *offset) {
     symbol* sym = sym_tab->get_symbol(sym_p);
     *level = sym->level;
     *offset = sym->offset;
+    if (sym->tag == SYM_PARAM)
+	*offset += FIRST_ARG_OFFSET;
+    else
+	*offset = -(*offset + 4);
 }
 
 
