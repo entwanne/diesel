@@ -107,7 +107,6 @@ void code_generator::prologue(symbol *new_env) {
     out << "\t\t" << "set" << "\t" << -ar_size << ",%l0" << endl
 	<< "\t\t" << "save" << "\t" << "%sp,%l0,%sp" << endl;
     int level = new_env->level + 1;
-    // out << "!!!" << last_arg->size << last_arg->preceding << endl;
     out << "\t\t" << "st" << "\t%g" << level << ",[%fp"
 	<< std::showpos << DISPLAY_REG_OFFSET << std::noshowpos << "]" << endl
 	<< "\t\t" << "mov" << "\t%fp,%g" << level << endl;
@@ -481,7 +480,7 @@ void code_generator::expand(quad_list *q_list) {
 		else
 		    label = sym->get_function_symbol()->label_nr;
 		out << "\t\t" << "call" << "\tL" << label
-		    << "! " << sym_tab->pool_lookup(sym->id) << endl
+		    << "\t! " << sym_tab->pool_lookup(sym->id) << endl
 		    << "\t\t" << "nop" << endl;
 		
 		break;
