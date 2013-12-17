@@ -76,6 +76,7 @@ void code_generator::prologue(symbol *new_env) {
     int ar_size;                // Activation record size.
     int label_nr;               // Assembler label nr.
     parameter_symbol *last_arg; // Used to move parameters onto the stack.
+    parameter_symbol* arg;
 
     // Again, we need a safe downcast for a procedure/function.
     // Note that since we have already generated quads for the entire block
@@ -104,6 +105,8 @@ void code_generator::prologue(symbol *new_env) {
 	    << long_symbols << ")" << endl;
 
     /* Your code here. */
+    for (arg = last_arg; arg; arg = arg->preceding)
+	ar_size -= align(arg->size);
     out << "\t\t" << "set" << "\t" << -ar_size << ",%l0" << endl
 	<< "\t\t" << "save" << "\t" << "%sp,%l0,%sp" << endl;
     int level = new_env->level + 1;
@@ -111,10 +114,11 @@ void code_generator::prologue(symbol *new_env) {
 	<< std::showpos << DISPLAY_REG_OFFSET << std::noshowpos << "]" << endl
 	<< "\t\t" << "mov" << "\t%fp,%g" << level << endl;
     int offset = FIRST_ARG_OFFSET;
-    for(int narg = 0; last_arg; ++narg, last_arg = last_arg->preceding) {
+    arg = last_arg;
+    for(int narg = 0; arg; ++narg, arg = arg->preceding) {
 	out << "\t\t" << "st" << "\t%i" << narg << ",[%fp"
 	    << std::showpos << offset << std::noshowpos << "]" << endl;
-	offset += last_arg->size;
+	offset += arg->size;
     }
     
     out << flush;    
