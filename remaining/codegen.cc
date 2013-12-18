@@ -208,6 +208,7 @@ void code_generator::expand(quad_list *q_list) {
     int label;              // Assembler label.
     
     int nr_args = 0;            // Used for parameter generation.
+    sym_index args_sym[6];
     
     long quad_nr = 0;       // Just to make debug output easier to read.
     symbol *sym;            // Used for safe downcasting.
@@ -478,10 +479,7 @@ void code_generator::expand(quad_list *q_list) {
 		
 	    case q_param:
 		/* Your code here. */
-		// out << "\t\t" << "set" << "\t" << q->int1 << ",%o" << nr_args << endl;
-		// store(nr_args, q->int1);
-		fetch(q->sym1, nr_args);
-		++nr_args;
+		args_sym[nr_args++] = q->sym1;
 		break;
 		
 	    case q_call:
@@ -491,6 +489,8 @@ void code_generator::expand(quad_list *q_list) {
 		    label = sym->get_procedure_symbol()->label_nr;
 		else
 		    label = sym->get_function_symbol()->label_nr;
+		for (int i = 0; i < nr_args; ++i)
+		    fetch(args_sym[i], i);
 		out << "\t\t" << "call" << "\tL" << label
 		    << "\t! " << sym_tab->pool_lookup(sym->id) << endl
 		    << "\t\t" << "nop" << endl;
