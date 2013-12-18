@@ -170,6 +170,25 @@ void code_generator::find(sym_index sym_p, int *level, int *offset) {
 void code_generator::fetch(sym_index sym_p, register_type dest) {
     /* Your code here. */
     int level, offset;
+    symbol* sym;
+    if(sym_p != NULL_SYM) {
+    	sym = sym_tab->get_symbol(sym_p);
+    	if(sym->tag == SYM_CONST) {
+    	    constant_symbol* csym = sym->get_constant_symbol();
+    	    if(csym->type == integer_type) {
+    		out << "\t\t" << "set" << '\t' << csym->const_value.ival
+    		    << ',' << reg[static_cast<int>(dest)] << endl;
+    	    }
+    	    else {
+    		out << "\t\t" << "set" << '\t' << csym->const_value.ival
+    		    << ",%l0" << endl
+		    << "\t\t" << "st" << "\t%l0,[%sp+64]" << endl
+		    << "\t\t" << "ld" << "\t[%sp+64],"
+		    << reg[static_cast<int>(dest)] << endl;
+    	    }
+    	    return ;
+    	}
+    }
     find(sym_p, &level, &offset);
     out << "\t\t" << "ld" << "\t[%g" << level
 	<< std::showpos << offset << std::noshowpos
