@@ -444,8 +444,10 @@ sym_index ast_if::generate_quads(quad_list &q) {
 
     if(body != NULL)
 	body->generate_quads(q);
-    q += new quadruple(q_jmp, label_end, NULL_SYM, NULL_SYM);
-    q += new quadruple(q_labl, label_after, NULL_SYM, NULL_SYM);
+    if(label_end != label_after) {
+	q += new quadruple(q_jmp, label_end, NULL_SYM, NULL_SYM);
+	q += new quadruple(q_labl, label_after, NULL_SYM, NULL_SYM);
+    }
 
     if(elsif_list != NULL)
     	elsif_list->generate_quads_and_jump(q, label_end);
@@ -453,8 +455,7 @@ sym_index ast_if::generate_quads(quad_list &q) {
     if(else_body != NULL)
 	else_body->generate_quads(q);
 
-    if (label_end != label_after)
-      q += new quadruple(q_labl, label_end, NULL_SYM, NULL_SYM);
+    q += new quadruple(q_labl, label_end, NULL_SYM, NULL_SYM);
 
     return NULL_SYM;
     
