@@ -105,8 +105,6 @@ void code_generator::prologue(symbol *new_env) {
 	    << long_symbols << ")" << endl;
 
     /* Your code here. */
-    for (arg = last_arg; arg; arg = arg->preceding)
-	ar_size -= align(arg->size);
     out << "\t\t" << "set" << "\t" << -ar_size << ",%l0" << endl
 	<< "\t\t" << "save" << "\t" << "%sp,%l0,%sp" << endl;
     int level = new_env->level + 1;
