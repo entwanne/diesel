@@ -87,7 +87,7 @@ void ast_expr_list::optimize() {
     if(preceding != NULL)
 	preceding->optimize();
     if(last_expr != NULL)
-	last_expr = fold_constants_id(optimizer->fold_constants(last_expr));
+	last_expr = optimizer->fold_constants(last_expr);
 }
 
 
