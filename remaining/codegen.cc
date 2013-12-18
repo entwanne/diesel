@@ -158,9 +158,9 @@ void code_generator::find(sym_index sym_p, int *level, int *offset) {
     *level = sym->level;
     *offset = sym->offset;
     if (sym->tag == SYM_PARAM)
-	*offset += FIRST_ARG_OFFSET;
+    	*offset += FIRST_ARG_OFFSET;
     else
-	*offset = -(*offset + 4);
+    	*offset = -(*offset + 4);
 }
 
 
@@ -183,7 +183,6 @@ void code_generator::store(register_type src, sym_index sym_p) {
     /* Your code here. */
     int level, offset;
     find(sym_p, &level, &offset);
-    // out << "store: " << reg[static_cast<int>(src)] << ", " << level << ", " << offset << endl;
     out << "\t\t" << "st" << "\t" << reg[static_cast<int>(src)]
 	<< ",[%g" << level
 	<< std::showpos << offset << std::noshowpos
@@ -195,7 +194,10 @@ void code_generator::store(register_type src, sym_index sym_p) {
 /* This function fetches the base address of an array. */
 void code_generator::array_address(sym_index sym_p, register_type dest) {
     /* Your code here. */
-    out << "kikoo4" << endl;
+    array_symbol* asym = sym_tab->get_symbol(sym_p)->get_array_symbol();
+    out << "\t\t" << "sub" << "\t%g" << asym->level
+	<< ',' << asym->offset + 4 * asym->array_cardinality
+	<< ',' << reg[static_cast<int>(dest)] << endl;
 }
 
 
