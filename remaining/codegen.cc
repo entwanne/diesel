@@ -478,9 +478,9 @@ void code_generator::expand(quad_list *q_list) {
 		
 	    case q_param:
 		/* Your code here. */
-		// out << "\t\t" << "set" << endl;
-		out << "\t\t" << "set" << "\t" << q->int1 << ",%o" << nr_args << endl;
-		store(nr_args, q->sym3);
+		// out << "\t\t" << "set" << "\t" << q->int1 << ",%o" << nr_args << endl;
+		// store(nr_args, q->int1);
+		fetch(q->sym1, nr_args);
 		++nr_args;
 		break;
 		
