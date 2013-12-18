@@ -494,6 +494,8 @@ void code_generator::expand(quad_list *q_list) {
 		out << "\t\t" << "call" << "\tL" << label
 		    << "\t! " << sym_tab->pool_lookup(sym->id) << endl
 		    << "\t\t" << "nop" << endl;
+		if(q->sym3 != NULL_SYM)
+		    store(o0, q->sym3);
 		nr_args = 0;
 		break;
 		
