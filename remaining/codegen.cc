@@ -509,7 +509,7 @@ void code_generator::expand(quad_list *q_list) {
 		else
 		    label = sym->get_function_symbol()->label_nr;
 		for (int i = 0; i < nr_args; ++i)
-		    fetch(args_sym[i], i);
+		    fetch(args_sym[nr_args - i - 1], i);
 		out << "\t\t" << "call" << "\tL" << label
 		    << "\t! " << sym_tab->pool_lookup(sym->id) << endl
 		    << "\t\t" << "nop" << endl;
