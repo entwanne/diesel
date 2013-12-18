@@ -473,7 +473,7 @@ sym_index ast_return::generate_quads(quad_list &q) {
 			   q.last_label, ret_p, NULL_SYM);
     }
     else
-	q += new quadruple(q_ireturn, q.last_label, NULL_SYM, NULL_SYM);
+	q += new quadruple(q_jmp, q.last_label, NULL_SYM, NULL_SYM);
     return NULL_SYM;    
 }
 
