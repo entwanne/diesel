@@ -284,7 +284,8 @@ void ast_greaterthan::optimize() {
 void ast_procedurecall::optimize() {
 /* Your code here. */
     id = optimizer->fold_constants(id)->get_ast_id();
-    parameter_list->optimize();
+    if(parameter_list != NULL)
+      parameter_list->optimize();
 }
 
 
