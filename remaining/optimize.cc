@@ -79,6 +79,7 @@ void ast_stmt_list::optimize() {
 	last_stmt->optimize();
 }
 
+static ast_expression* fold_constants_id(ast_expression* node);
 
 /* Optimize a list of expressions. */
 void ast_expr_list::optimize() {
@@ -86,7 +87,7 @@ void ast_expr_list::optimize() {
     if(preceding != NULL)
 	preceding->optimize();
     if(last_expr != NULL)
-	last_expr = optimizer->fold_constants(last_expr);
+	last_expr = fold_constants_id(optimizer->fold_constants(last_expr));
 }
 
 
