@@ -326,7 +326,8 @@ void ast_return::optimize() {
 void ast_functioncall::optimize() {
 /* Your code here. */
     id = optimizer->fold_constants(id)->get_ast_id();
-    parameter_list->optimize();
+    if(parameter_list != NULL)
+	parameter_list->optimize();
 }
 
 void ast_uminus::optimize() {
