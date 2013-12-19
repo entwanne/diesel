@@ -188,9 +188,16 @@ void code_generator::fetch(sym_index sym_p, register_type dest) {
     	}
     }
     find(sym_p, &level, &offset);
-    out << "\t\t" << "ld" << "\t[%g" << level
-	<< std::showpos << offset << std::noshowpos
-	<< "]," << reg[static_cast<int>(dest)] << endl;
+    if (offset > 4095 || offset < -4096) {
+      out << "\t\t" << "set" << '\t' << offset << ",%l0" << endl
+      	  << "\t\t" << "ld" << "\t[%g" << level << "+%l0],"
+      	  << reg[static_cast<int>(dest)] << endl;
+    }
+    else {
+      out << "\t\t" << "ld" << "\t[%g" << level
+	  << std::showpos << offset << std::noshowpos
+	  << "]," << reg[static_cast<int>(dest)] << endl;
+    }
 }
 
 
@@ -200,10 +207,18 @@ void code_generator::store(register_type src, sym_index sym_p) {
     /* Your code here. */
     int level, offset;
     find(sym_p, &level, &offset);
-    out << "\t\t" << "st" << "\t" << reg[static_cast<int>(src)]
-	<< ",[%g" << level
-	<< std::showpos << offset << std::noshowpos
-	<< "]" << endl;
+    if (offset > 4095 || offset < -4096) {
+      out << "\t\t" << "set" << '\t' << offset << ",%l0" << endl
+	  << "\t\t" << "st" << "\t" << reg[static_cast<int>(src)]
+	  << ",[%g" << level
+	  << "+%l0]" << endl;
+    }
+    else {
+      out << "\t\t" << "st" << "\t" << reg[static_cast<int>(src)]
+	  << ",[%g" << level
+	  << std::showpos << offset << std::noshowpos
+	  << "]" << endl;
+    }
 }
 
 
@@ -212,9 +227,17 @@ void code_generator::store(register_type src, sym_index sym_p) {
 void code_generator::array_address(sym_index sym_p, register_type dest) {
     /* Your code here. */
     array_symbol* asym = sym_tab->get_symbol(sym_p)->get_array_symbol();
-    out << "\t\t" << "sub" << "\t%g" << asym->level
-	<< ',' << asym->offset + 4 * asym->array_cardinality
-	<< ',' << reg[static_cast<int>(dest)] << endl;
+    int offset = asym->offset + 4 * asym->array_cardinality;
+    if (offset > 4095 || offset < -4096) {
+      out << "\t\t" << "set" << '\t' << offset << ",%l0" << endl
+	  << "\t\t" << "sub" << "\t%g" << asym->level
+	  << ",%l0," << reg[static_cast<int>(dest)] << endl;
+    }
+    else {
+      out << "\t\t" << "sub" << "\t%g" << asym->level
+	  << ',' << offset
+	  << ',' << reg[static_cast<int>(dest)] << endl;
+    }
 }
 
 
@@ -225,7 +248,7 @@ void code_generator::expand(quad_list *q_list) {
     int label;              // Assembler label.
     
     int nr_args = 0;            // Used for parameter generation.
-    sym_index args_sym[6];
+    sym_index args_sym[512];
     
     long quad_nr = 0;       // Just to make debug output easier to read.
     symbol *sym;            // Used for safe downcasting.
@@ -506,14 +529,14 @@ void code_generator::expand(quad_list *q_list) {
 		    label = sym->get_procedure_symbol()->label_nr;
 		else
 		    label = sym->get_function_symbol()->label_nr;
-		for (int i = 0; i < nr_args; ++i)
+		for (int i = 0; i < q->int2; ++i)
 		    fetch(args_sym[nr_args - i - 1], i);
 		out << "\t\t" << "call" << "\tL" << label
 		    << "\t! " << sym_tab->pool_lookup(sym->id) << endl
 		    << "\t\t" << "nop" << endl;
 		if(q->sym3 != NULL_SYM)
 		    store(o0, q->sym3);
-		nr_args = 0;
+		nr_args -= q->int2;
 		break;
 		
 	    case q_rreturn:
